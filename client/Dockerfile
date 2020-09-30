@@ -6,7 +6,7 @@ COPY package.json ./
 
 RUN npm cache clean --force
 
-RUN npm i --no-package-lock
+RUN npm install --no-package-lock
 
 COPY ./ ./
 
