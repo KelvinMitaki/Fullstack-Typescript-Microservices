@@ -5,13 +5,16 @@ import Router from "next/router";
 import nProgress from "nprogress";
 import SignedInMenu from "./SignedInMenu";
 import { connect } from "react-redux";
+import { Layout } from "../interfaces/Layout";
+import { StoreState } from "../interfaces/StoreState";
 
-Router.onRouteChangeStart = () => {
+(Router as any).onRouteChangeStart = () => {
   nProgress.start();
 };
-Router.onRouteChangeComplete = () => nProgress.done();
-Router.onRouteChangeError = () => nProgress.done();
-const Layout = ({ children, title, user }) => {
+(Router as any).onRouteChangeComplete = () => nProgress.done();
+(Router as any).onRouteChangeError = () => nProgress.done();
+
+const Layout = ({ children, title, user }: Layout) => {
   return (
     <React.Fragment>
       <Head>
@@ -78,7 +81,7 @@ const Layout = ({ children, title, user }) => {
     </React.Fragment>
   );
 };
-const mapStateToProps = state => {
+const mapStateToProps = (state: StoreState) => {
   return {
     user: state.auth.user
   };

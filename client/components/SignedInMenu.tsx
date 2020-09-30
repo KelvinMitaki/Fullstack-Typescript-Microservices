@@ -6,14 +6,12 @@ import { LogoutUser, logoutUser } from "../redux/actions";
 import { User } from "../interfaces/User";
 
 interface SignedInMenuInterface {
-  user: { user: User };
+  user: User;
   logoutUser: Function;
 }
 
 const SignedInMenu = ({ user, logoutUser }: SignedInMenuInterface) => {
-  const {
-    user: { firstName, lastName }
-  } = user;
+  const { firstName, lastName } = user;
   return (
     <Menu.Item position="right">
       <Image avatar spaced="right" src="/1.png" />
