@@ -2,7 +2,7 @@ import React from "react";
 import { Form } from "semantic-ui-react";
 
 interface TextAreaInterface {
-  rows: number;
+  rows?: number;
   placeholder: string;
 }
 
