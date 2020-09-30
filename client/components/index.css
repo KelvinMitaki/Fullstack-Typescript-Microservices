@@ -1,0 +1,15 @@
+body {
+    background-color: rgb(234, 234, 234);
+    height: 65vh;
+  }
+  
+  .dropzone {
+    border: dashed 3px #eee;
+    border-radius: 5px;
+    padding-top: 30px;
+    text-align: center;
+  }
+  .dropzone--isActive {
+    border: dashed 3px green;
+  }
+  
