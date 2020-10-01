@@ -21,3 +21,11 @@ build:
             dest: .
           - src: "**/*.css"
             dest: .
+    - image: kevinmitaki/ftm-auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .

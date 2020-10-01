@@ -6,14 +6,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mongo
+      app: mongo-depl
   template:
     metadata:
       labels:
-        app: mongo
+        app: mongo-depl
     spec:
       containers:
-        - name: mongo
+        - name: mongo-depl
           image: mongo
 ---
 apiVersion: v1
@@ -23,7 +23,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: mongo
+    app: mongo-depl
   ports:
     - name: db
       protocol: TCP

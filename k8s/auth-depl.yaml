@@ -15,11 +15,19 @@ spec:
       containers:
         - name: auth
           image: kevinmitaki/ftm-auth
+          env:
+            - name: MONGO_URI
+              value: mongodb://mongo-auth-srv:27017/auth
+            - name: COOKIE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: cookie-secret
+                  key: COOKIE_SECRET
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  app: auth-srv
+  name: auth-srv
 spec:
   type: ClusterIP
   selector:
