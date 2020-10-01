@@ -3,7 +3,11 @@ import { app } from "./app";
 
 const start = async (): Promise<void> => {
   try {
-    if (!process.env.COOKIE_SECRET || !process.env.MONGO_URI) {
+    if (
+      !process.env.COOKIE_SECRET ||
+      !process.env.MONGO_URI ||
+      !process.env.JWT_KEY
+    ) {
       throw new Error("Env variables must be provided");
     }
     await mongoose.connect(process.env.MONGO_URI, {
