@@ -7,6 +7,8 @@ import { User } from "../../interfaces/User";
 import { RegisterFormValues } from "../../interfaces/Register";
 import { LoginFormValues } from "../../interfaces/Login";
 import { BasicProfileFormValues } from "../../interfaces/Basics";
+import { AppContext } from "next/app";
+import buildClient from "../../api/build-client";
 
 const baseURL = process.env.BASE_URL;
 
@@ -31,15 +33,15 @@ export interface CurrentUser {
   payload: User | null;
 }
 
-export const currentUser = (headers: RequestInit["headers"]) => async (
+export const currentUser = (context: AppContext) => async (
   dispatch: Dispatch
 ) => {
   try {
-    const res = await fetch("http://localhost:3000/api/current_user", {
-      headers: headers
-    });
-    const data = await res.json();
-    dispatch<CurrentUser>({ type: Types.CurrentUser, payload: data });
+    // const res = await fetch("http://localhost:3000/api/current_user", {
+    //   headers: headers
+    // });
+    const res = await buildClient(context).get("/api/user/current_user");
+    dispatch<CurrentUser>({ type: Types.CurrentUser, payload: res.data });
   } catch (error) {
     console.log(error);
   }

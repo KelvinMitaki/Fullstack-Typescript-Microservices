@@ -20,10 +20,10 @@ declare global {
 }
 
 route.get("/user/current_user", (req: Request, res: Response): void => {
-  if (!req.session.jwt) {
+  if (!req.session!.jwt) {
     res.send({ currentUser: null });
   }
-  req.currentUser = jwt.verify(req.session.jwt, process.env.JWT_KEY!) as Jwt;
+  req.currentUser = jwt.verify(req.session!.jwt, process.env.JWT_KEY!) as Jwt;
   res.send({ currentUser: req.currentUser });
 });
 
@@ -66,7 +66,7 @@ route.post(
 
     const userJwt = jwt.sign(
       { _id: user._id, email: user.email },
-      process.env.JWT_KEY
+      process.env.JWT_KEY!
     );
     req.session = {
       ...req.session,
@@ -102,7 +102,7 @@ route.post(
     }
     const userJwt = jwt.sign(
       { _id: user._id, email: user.email },
-      process.env.JWT_KEY
+      process.env.JWT_KEY!
     );
     req.session = {
       ...req.session,

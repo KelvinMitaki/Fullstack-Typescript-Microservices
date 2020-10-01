@@ -1,7 +1,7 @@
 import Axios, { AxiosInstance } from "axios";
-import { GetInitialProps } from "../interfaces/GetInitialProps";
+import { AppContext } from "next/app";
 
-export default ({ req }: GetInitialProps): AxiosInstance => {
+const buildClient = ({ ctx: { req } }: AppContext): AxiosInstance => {
   if (typeof window === "undefined") {
     return Axios.create({
       baseURL: "http:ingress-nginx-controller.ingress-nginx.svc.cluster.local",
@@ -13,3 +13,4 @@ export default ({ req }: GetInitialProps): AxiosInstance => {
     baseURL: "/"
   });
 };
+export default buildClient;
