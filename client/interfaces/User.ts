@@ -17,6 +17,5 @@ export interface User {
   following?: { [key: string]: string }[];
   followers?: { [key: string]: string }[];
   photos?: string[];
-  age?: number;
   interests?: string[];
 }
