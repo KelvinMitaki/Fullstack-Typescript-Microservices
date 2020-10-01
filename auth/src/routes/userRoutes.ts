@@ -6,10 +6,26 @@ import { User } from "../models/User";
 
 const route = Router();
 
-route.get(
-  "/user/currentUser",
-  async (req: Request, res: Response): Promise<void> => {}
-);
+export interface Jwt {
+  email: string;
+  password: string;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      currentUser?: Jwt;
+    }
+  }
+}
+
+route.get("/user/current_user", (req: Request, res: Response): void => {
+  if (!req.session.jwt) {
+    res.send({ currentUser: null });
+  }
+  req.currentUser = jwt.verify(req.session.jwt, process.env.JWT_KEY!) as Jwt;
+  res.send({ currentUser: req.currentUser });
+});
 
 route.post(
   "/user/register",
