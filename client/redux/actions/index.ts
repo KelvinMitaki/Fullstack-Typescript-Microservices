@@ -3,13 +3,28 @@ import Axios from "axios";
 import Router from "next/router";
 import fetch from "isomorphic-unfetch";
 import { Dispatch } from "redux";
-import { AppContext } from "next/app";
 import { User } from "../../interfaces/User";
 import { RegisterFormValues } from "../../interfaces/Register";
 import { LoginFormValues } from "../../interfaces/Login";
 import { BasicProfileFormValues } from "../../interfaces/Basics";
 
 const baseURL = process.env.BASE_URL;
+
+export interface GetMessage {
+  type: Types.GetMessage;
+  payload: { message: string };
+}
+
+export const getMessage = () => async (dispatch: Dispatch) => {
+  try {
+    const res = await Axios.get<GetMessage["payload"]>("/api/test", {
+      baseURL
+    });
+    dispatch<GetMessage>({ type: Types.GetMessage, payload: res.data });
+  } catch (error) {
+    console.log(error.response);
+  }
+};
 
 export interface CurrentUser {
   type: Types.CurrentUser;
