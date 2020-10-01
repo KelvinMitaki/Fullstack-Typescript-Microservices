@@ -6,8 +6,8 @@ import Link from "next/link";
 import EventDetailedChatForm from "../eventDetailedChatForm/EventDetailedChatForm";
 
 interface EventDetailedChatInterface {
-  comment: { [key: string]: string };
-  child: { [key: string]: string };
+  comment?: { [key: string]: string };
+  child?: { [key: string]: string };
 }
 
 class EventDetailedChat extends React.Component<EventDetailedChatInterface> {
@@ -75,19 +75,22 @@ class EventDetailedChat extends React.Component<EventDetailedChatInterface> {
                 <Comment.Actions>
                   <Comment.Action
                     onClick={() =>
+                      this.props.comment &&
                       this.handleOpenReplyForm(this.props.comment.id)
                     }
                   >
                     Reply
                   </Comment.Action>
-                  {replyFormOpen && commentId === this.props.comment.id && (
-                    <EventDetailedChatForm
-                      handleCloseReplyForm={this.handleCloseReplyForm}
-                      eventId={1}
-                      form={`form`}
-                      parentId={0}
-                    />
-                  )}
+                  {replyFormOpen &&
+                    commentId === this.props.comment &&
+                    this.props.comment!.id && (
+                      <EventDetailedChatForm
+                        handleCloseReplyForm={this.handleCloseReplyForm}
+                        eventId={1}
+                        form={`form`}
+                        parentId={0}
+                      />
+                    )}
                 </Comment.Actions>
               </Comment.Content>
               <Comment.Group>
@@ -113,19 +116,22 @@ class EventDetailedChat extends React.Component<EventDetailedChatInterface> {
                     <Comment.Actions>
                       <Comment.Action
                         onClick={() =>
+                          this.props.child &&
                           this.handleOpenReplyForm(this.props.child.id)
                         }
                       >
                         Reply
                       </Comment.Action>
-                      {replyFormOpen && commentId === this.props.child.id && (
-                        <EventDetailedChatForm
-                          handleCloseReplyForm={this.handleCloseReplyForm}
-                          eventId={1}
-                          form={`name`}
-                          parentId={0}
-                        />
-                      )}
+                      {replyFormOpen &&
+                        commentId === this.props.child &&
+                        this.props.child!.id && (
+                          <EventDetailedChatForm
+                            handleCloseReplyForm={this.handleCloseReplyForm}
+                            eventId={1}
+                            form={`name`}
+                            parentId={0}
+                          />
+                        )}
                     </Comment.Actions>
                   </Comment.Content>
                 </Comment>

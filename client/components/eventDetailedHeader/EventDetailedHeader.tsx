@@ -17,14 +17,14 @@ const eventImageTextStyle = {
 };
 
 interface EventDetailedHeaderInterface {
-  manageEvent: Function;
-  history: Function;
-  singleEvent: Function;
-  uid: string;
-  goingToEvent: Function;
-  cancelGoingToEvent: Function;
-  authenticated: boolean;
-  openModal: Function;
+  manageEvent?: Function;
+  history?: Function;
+  singleEvent?: Function;
+  uid?: string;
+  goingToEvent?: Function;
+  cancelGoingToEvent?: Function;
+  authenticated?: boolean;
+  openModal?: Function;
 }
 
 const EventDetailedHeader = ({
