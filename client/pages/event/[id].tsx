@@ -3,8 +3,8 @@ import EventDetailedHeader from "../../components/eventDetailedHeader/EventDetai
 import Layout from "../../components/Layout";
 import { Grid } from "semantic-ui-react";
 import EventDetailedInfo from "../../components/eventDetailedInfo/EventDetailedInfo";
-import EventDetailedChat from "../../components/eventDetailedChat/eventDetailedChat";
-import EventDetailedSidebar from "../../components/eventDetailedSideBar/EventDetailedSideBar";
+import EventDetailedChat from "../../components/eventDetailedChat/EventDetailedChat";
+import EventDetailedSidebar from "../../components/eventDetailedSideBar/EventDetailedSidebar";
 
 export class event extends Component {
   render() {
