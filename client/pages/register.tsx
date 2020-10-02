@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Layout from "../components/Layout";
 import { Form, Button, Segment, Message, Icon } from "semantic-ui-react";
-import { reduxForm, Field } from "redux-form";
+import { reduxForm, Field, InjectedFormProps } from "redux-form";
 import TextInput from "../components/reduxForm/TextInput";
 import validator from "validator";
 import { connect } from "react-redux";
@@ -15,19 +15,20 @@ import { StoreState } from "../interfaces/StoreState";
 
 interface Props {
   user: User | null;
-  handleSubmit(callback: Function): any;
   registerUser: Function;
-  invalid: boolean;
   registerError: string | null;
   registerLoading: boolean;
 }
 
-export class register extends Component<Props> {
+export class register extends Component<
+  InjectedFormProps<RegisterFormValues, Props> & Props
+> {
   componentDidMount() {
     if (this.props.user && this.props.user.isLoggedIn) {
       router.replace("/");
     }
   }
+
   static async getInitialProps({ res, store }: GetInitialProps) {
     if (
       store &&
@@ -46,9 +47,8 @@ export class register extends Component<Props> {
         <div className="segment profile">
           <Segment>
             <Form
-              onSubmit={this.props.handleSubmit(
-                (formValues: RegisterFormValues): RegisterUser =>
-                  this.props.registerUser(formValues)
+              onSubmit={this.props.handleSubmit(formValues =>
+                this.props.registerUser(formValues)
               )}
             >
               <Form.Group widths="equal">
@@ -164,6 +164,7 @@ const mapStateToProps = (state: StoreState) => {
     registerError: state.auth.registerError
   };
 };
-export default reduxForm({ form: "register", validate })(
-  connect(mapStateToProps, { registerUser })(register)
-);
+export default reduxForm<RegisterFormValues, Props>({
+  form: "register",
+  validate
+})(connect(mapStateToProps, { registerUser })(register));
