@@ -38,7 +38,7 @@ const initStore = (): Store => createStore(reducer, bindMiddleware([thunk]));
 const combineReducer = combineReducers<StoreState>({
   auth: authReducer,
   event: eventReducer,
-  formReducer
+  form: formReducer
 });
 
 export const wrapper = createWrapper(initStore);
