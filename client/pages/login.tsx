@@ -1,43 +1,32 @@
 import React, { Component } from "react";
 import Layout from "../components/Layout";
 import { Segment, Grid, Form, Button, Divider } from "semantic-ui-react";
-import router from "next/router";
-import { reduxForm, Field } from "redux-form";
+import Router from "next/router";
+import { reduxForm, Field, InjectedFormProps } from "redux-form";
 import validator from "validator";
 import TextInput from "../components/reduxForm/TextInput";
-import { connect } from "react-redux";
-import { LoginUser, loginUser } from "../redux/actions";
-import { StoreState } from "../interfaces/StoreState";
 import { LoginFormValues } from "../interfaces/Login";
-import { GetInitialProps } from "../interfaces/GetInitialProps";
 import { User } from "../interfaces/User";
+import Axios from "axios";
 
 interface Props {
   user: User | null;
-  loginUser: Function;
-  handleSubmit(callback: Function): any;
-  loading: boolean;
   loginError: string | null;
   invalid: boolean;
 }
 
-export class Login extends Component<Props> {
-  componentDidMount() {
-    if (this.props.user && this.props.user.isLoggedIn) {
-      router.replace("/");
-    }
-  }
-  static async getInitialProps({ res, store }: GetInitialProps) {
-    if (
-      store &&
-      res &&
-      store.getState().auth.user &&
-      store.getState().auth.user?.isLoggedIn
-    ) {
-      res.writeHead(301, { location: "/" });
-      res.end();
-    }
-    return { store };
+export class Login extends Component<
+  InjectedFormProps<LoginFormValues, Props> & Props
+> {
+  state = {
+    loading: false,
+    error: null
+  };
+  async loginUser(formValues: LoginFormValues) {
+    this.setState({ loading: true });
+    await Axios.post("/api/user/login", formValues);
+    Router.push("/");
+    this.setState({ loading: false });
   }
   render() {
     return (
@@ -48,8 +37,7 @@ export class Login extends Component<Props> {
               <Grid.Column>
                 <Form
                   onSubmit={this.props.handleSubmit(
-                    (formValues: LoginFormValues): LoginUser =>
-                      this.props.loginUser(formValues)
+                    (formValues: LoginFormValues) => this.loginUser(formValues)
                   )}
                 >
                   <Field
@@ -71,8 +59,8 @@ export class Login extends Component<Props> {
                     content="Login"
                     primary
                     fluid
-                    disabled={this.props.invalid || this.props.loading}
-                    loading={this.props.loading}
+                    disabled={this.props.invalid || this.state.loading}
+                    loading={this.state.loading}
                   />
                 </Form>
 
@@ -85,7 +73,7 @@ export class Login extends Component<Props> {
                 <Button
                   content="Sign up"
                   icon="signup"
-                  onClick={() => router.push("/register")}
+                  onClick={() => Router.push("/register")}
                   size="big"
                 />
               </Grid.Column>
@@ -135,13 +123,6 @@ const validate = (formValues: LoginFormValues) => {
   }
   return errors;
 };
-const mapStateToProps = (state: StoreState) => {
-  return {
-    loading: state.auth.loading,
-    user: state.auth.user,
-    loginError: state.auth.loginError
-  };
-};
-export default reduxForm({ form: "login", validate })(
-  connect(mapStateToProps, { loginUser })(Login)
+export default reduxForm<LoginFormValues, Props>({ form: "login", validate })(
+  Login
 );

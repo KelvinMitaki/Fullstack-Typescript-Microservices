@@ -3,8 +3,6 @@ import App, { AppContext, AppProps } from "next/app";
 import React from "react";
 import "cropperjs/dist/cropper.css";
 import "semantic-ui-css/semantic.min.css";
-import { currentUser } from "../redux/actions";
-import { wrapper } from "../redux/reducers";
 import buildClient from "../api/build-client";
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -13,19 +11,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 MyApp.getInitialProps = async (appContext: AppContext) => {
   const appProps = await App.getInitialProps(appContext);
-  const {
-    ctx: { store }
-  } = appContext;
-  if (store) {
-    // @ts-ignore
-    store.dispatch(
-      // @ts-ignore
 
-      currentUser(appContext)
-    );
-  }
-
-  return { ...appProps };
+  const res = await buildClient(appContext).get("/api/user/current_user");
+  return { ...appProps, user: res.data.currentUser };
 };
 
-export default wrapper.withRedux(MyApp);
+export default MyApp;

@@ -4,18 +4,14 @@ import { Form, Button, Segment, Message, Icon } from "semantic-ui-react";
 import { reduxForm, Field, InjectedFormProps } from "redux-form";
 import TextInput from "../components/reduxForm/TextInput";
 import validator from "validator";
-import { connect } from "react-redux";
-import { RegisterUser, registerUser } from "../redux/actions";
 import Link from "next/link";
-import router from "next/router";
+import Router from "next/router";
 import { RegisterFormValues } from "../interfaces/Register";
-import { GetInitialProps } from "../interfaces/GetInitialProps";
 import { User } from "../interfaces/User";
-import { StoreState } from "../interfaces/StoreState";
+import Axios from "axios";
 
 interface Props {
   user: User | null;
-  registerUser: Function;
   registerError: string | null;
   registerLoading: boolean;
 }
@@ -23,23 +19,9 @@ interface Props {
 export class register extends Component<
   InjectedFormProps<RegisterFormValues, Props> & Props
 > {
-  componentDidMount() {
-    if (this.props.user && this.props.user.isLoggedIn) {
-      router.replace("/");
-    }
-  }
-
-  static async getInitialProps({ res, store }: GetInitialProps) {
-    if (
-      store &&
-      res &&
-      store.getState().auth.user &&
-      store.getState().auth.user?.isLoggedIn
-    ) {
-      res.writeHead(301, { location: "/" });
-      res.end();
-    }
-    return { store };
+  async registerUser(formValues: RegisterFormValues) {
+    await Axios.post("/api/user/register", formValues);
+    Router.push("/");
   }
   render() {
     return (
@@ -48,7 +30,7 @@ export class register extends Component<
           <Segment>
             <Form
               onSubmit={this.props.handleSubmit(formValues =>
-                this.props.registerUser(formValues)
+                this.registerUser(formValues)
               )}
             >
               <Form.Group widths="equal">
@@ -157,14 +139,7 @@ const validate = (formValues: RegisterFormValues) => {
   return errors;
 };
 
-const mapStateToProps = (state: StoreState) => {
-  return {
-    registerLoading: state.auth.registerLoading,
-    user: state.auth.user,
-    registerError: state.auth.registerError
-  };
-};
 export default reduxForm<RegisterFormValues, Props>({
   form: "register",
   validate
-})(connect(mapStateToProps, { registerUser })(register));
+})(register);
