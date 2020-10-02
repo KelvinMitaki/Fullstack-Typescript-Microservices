@@ -25,7 +25,7 @@ export class register extends Component<
   }
   render() {
     return (
-      <Layout title="register">
+      <Layout title="register" user={this.props.user}>
         <div className="segment profile">
           <Segment>
             <Form

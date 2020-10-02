@@ -32,7 +32,7 @@ export class Profile extends Component<ProfileInterface> {
     if (this.props.user) {
       const { firstName, lastName, createdAt } = this.props.user;
       return (
-        <Layout title="Profile">
+        <Layout title="Profile" user={this.props.user}>
           <div className="profile">
             <Grid stackable>
               <Grid.Column width={16}>

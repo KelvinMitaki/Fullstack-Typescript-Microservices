@@ -1,5 +1,4 @@
 export interface User {
-  isLoggedIn: boolean;
   firstName: string;
   lastName: string;
   email: string;

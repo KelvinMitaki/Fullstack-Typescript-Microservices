@@ -35,7 +35,7 @@ export class Login extends Component<
   render() {
     this.state.error && console.log(this.state.error);
     return (
-      <Layout title="Login">
+      <Layout title="Login" user={this.props.user}>
         <div className="segment profile">
           <Segment placeholder>
             <Grid columns={2} relaxed="very" stackable>

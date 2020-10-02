@@ -5,11 +5,16 @@ import { Grid } from "semantic-ui-react";
 import EventDetailedInfo from "../../components/eventDetailedInfo/EventDetailedInfo";
 import EventDetailedChat from "../../components/eventDetailedChat/EventDetailedChat";
 import EventDetailedSidebar from "../../components/eventDetailedSideBar/EventDetailedSidebar";
+import { User } from "../../interfaces/User";
 
-export class event extends Component {
+interface Props {
+  user: User | null;
+}
+
+export class event extends Component<Props> {
   render() {
     return (
-      <Layout title="Event">
+      <Layout title="Event" user={this.props.user}>
         <div className="profile">
           <Grid stackable>
             <Grid.Column width={10}>

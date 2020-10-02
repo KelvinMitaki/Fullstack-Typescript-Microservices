@@ -35,7 +35,7 @@ export class basics extends Component<
   }
   render() {
     return (
-      <Layout title="Basics">
+      <Layout title="Basics" user={this.props.user}>
         <div className="profile">
           <Grid stackable>
             <Grid.Column width={12}>

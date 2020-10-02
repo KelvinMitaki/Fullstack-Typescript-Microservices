@@ -13,7 +13,6 @@ import { LayoutInterFace } from "../interfaces/Layout";
 (Router as any).onRouteChangeError = () => nProgress.done();
 
 const Layout = ({ children, title, user }: LayoutInterFace) => {
-  console.log(user);
   return (
     <React.Fragment>
       <Head>
@@ -31,7 +30,7 @@ const Layout = ({ children, title, user }: LayoutInterFace) => {
             exact="true"
             name="Events"
           />
-          {user && user.isLoggedIn && (
+          {user && user.email && (
             <React.Fragment>
               <Menu.Item
                 as="a"
@@ -53,7 +52,7 @@ const Layout = ({ children, title, user }: LayoutInterFace) => {
           )}
 
           <Menu.Item position="right">
-            {user && user.isLoggedIn ? (
+            {user && user.email ? (
               <SignedInMenu user={user} />
             ) : (
               <React.Fragment>

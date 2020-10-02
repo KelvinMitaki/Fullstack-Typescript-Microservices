@@ -13,6 +13,7 @@ import {
 } from "semantic-ui-react";
 import SettingsNav from "../../components/SettingsNav";
 import TextInput from "../../components/reduxForm/TextInput";
+import { User } from "../../interfaces/User";
 
 const interests = [
   { key: "drinks", text: "Drinks", value: "drinks" },
@@ -22,10 +23,13 @@ const interests = [
   { key: "music", text: "Music", value: "music" },
   { key: "travel", text: "Travel", value: "travel" }
 ];
-export class about extends Component {
+interface Props {
+  user: User | null;
+}
+export class about extends Component<Props> {
   render() {
     return (
-      <Layout title="About">
+      <Layout title="About" user={this.props.user}>
         <div className="profile">
           <Grid stackable>
             <Grid.Column width={12}>

@@ -12,18 +12,21 @@ import DropzoneInput from "../../components/dropzone/DropzoneInput";
 import Layout from "../../components/Layout";
 import CropperInput from "../../components/cropper/CropperInput";
 import SettingsNav from "../../components/SettingsNav";
+import { User } from "../../interfaces/User";
 
 interface Props {
   loading: boolean;
   photos: { [key: string]: string }[];
   profile: { [key: string]: string };
+  user: User | null;
 }
 
 const PhotosPage = ({
   loading,
   //   uploadProfileImage,
   photos,
-  profile
+  profile,
+  user
 }: //   deletePhoto,
 //   updateProfilePhoto
 Props) => {
@@ -61,7 +64,7 @@ Props) => {
   //     await updateProfilePhoto(photo);
   //   };
   return (
-    <Layout title="Photos">
+    <Layout title="Photos" user={user}>
       <div className="profile">
         <Grid stackable>
           <Grid.Column width={12}>

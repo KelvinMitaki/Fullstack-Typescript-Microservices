@@ -22,7 +22,7 @@ export class events extends Component<Props> {
   render() {
     console.log(this.props.user);
     return (
-      <Layout title="Events">
+      <Layout title="Events" user={this.props.user}>
         <div className="profile">
           <Segment.Group>
             <Segment>
