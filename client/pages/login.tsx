@@ -23,12 +23,17 @@ export class Login extends Component<
     error: null
   };
   async loginUser(formValues: LoginFormValues) {
-    this.setState({ loading: true });
-    await Axios.post("/api/user/login", formValues);
-    Router.push("/");
-    this.setState({ loading: false });
+    try {
+      this.setState({ loading: true });
+      await Axios.post("/api/user/login", formValues);
+      Router.push("/");
+      this.setState({ loading: false });
+    } catch (error) {
+      this.setState({ loading: false, error: error.response.data });
+    }
   }
   render() {
+    this.state.error && console.log(this.state.error);
     return (
       <Layout title="Login">
         <div className="segment profile">

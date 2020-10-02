@@ -13,11 +13,8 @@ import {
   Icon,
   Button
 } from "semantic-ui-react";
-import { connect } from "react-redux";
-import { StoreState } from "../interfaces/StoreState";
 import { User } from "../interfaces/User";
 import { NextPageContext } from "next";
-import { GetInitialProps } from "../interfaces/GetInitialProps";
 
 const panes = [
   { menuItem: "All Events", pane: { key: "allEvents" } },
@@ -31,23 +28,6 @@ interface ProfileInterface {
 }
 
 export class Profile extends Component<ProfileInterface> {
-  componentDidMount() {
-    if (this.props.user && !this.props.user.isLoggedIn) {
-      router.replace("/login");
-    }
-  }
-  static async getInitialProps({ res, store }: GetInitialProps) {
-    if (
-      store &&
-      res &&
-      store.getState().auth.user &&
-      !store.getState().auth.user?.isLoggedIn
-    ) {
-      res.writeHead(301, { location: "/login" });
-      res.end();
-    }
-    return { store };
-  }
   render() {
     if (this.props.user) {
       const { firstName, lastName, createdAt } = this.props.user;
@@ -183,9 +163,4 @@ export class Profile extends Component<ProfileInterface> {
     }
   }
 }
-const mapStateToProps = (state: StoreState) => {
-  return {
-    user: state.auth.user
-  };
-};
-export default connect(mapStateToProps)(Profile);
+export default Profile;

@@ -4,9 +4,7 @@ import Head from "next/head";
 import Router from "next/router";
 import nProgress from "nprogress";
 import SignedInMenu from "./SignedInMenu";
-import { connect } from "react-redux";
 import { LayoutInterFace } from "../interfaces/Layout";
-import { StoreState } from "../interfaces/StoreState";
 
 (Router as any).onRouteChangeStart = () => {
   nProgress.start();

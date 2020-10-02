@@ -1,7 +1,7 @@
 import Document, { Head, NextScript, Main, Html } from "next/document";
 import React from "react";
 
-export class _document extends Document {
+class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
@@ -22,4 +22,4 @@ export class _document extends Document {
   }
 }
 
-export default _document;
+export default MyDocument;

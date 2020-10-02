@@ -1,6 +1,5 @@
 import React from "react";
 import { Segment, Header, Comment } from "semantic-ui-react";
-import { connect } from "react-redux";
 import formatDistance from "date-fns/formatDistance";
 import Link from "next/link";
 import EventDetailedChatForm from "../eventDetailedChatForm/EventDetailedChatForm";

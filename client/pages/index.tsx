@@ -11,15 +11,16 @@ import {
 import Link from "next/link";
 import Router from "next/router";
 import Layout from "../components/Layout";
-import { connect } from "react-redux";
-import { StoreState } from "../interfaces/StoreState";
+import { User } from "../interfaces/User";
+import { NextPageContext } from "next";
 
 interface Props {
-  auth: StoreState["auth"];
+  user: User | null;
 }
 
 export class events extends Component<Props> {
   render() {
+    console.log(this.props.user);
     return (
       <Layout title="Events">
         <div className="profile">
@@ -125,10 +126,5 @@ export class events extends Component<Props> {
     );
   }
 }
-const mapStateToProps = (state: StoreState) => {
-  return {
-    auth: state.auth
-  };
-};
 
-export default connect(mapStateToProps)(events);
+export default events;

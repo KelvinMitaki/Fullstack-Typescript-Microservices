@@ -1,6 +1,5 @@
 import React from "react";
 import { Segment, Image, Header, Item, Button, Label } from "semantic-ui-react";
-import { connect } from "react-redux";
 import Link from "next/link";
 
 const eventImageStyle = {

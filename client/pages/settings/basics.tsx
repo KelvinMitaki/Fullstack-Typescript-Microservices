@@ -12,7 +12,6 @@ import SettingsNav from "../../components/SettingsNav";
 import TextInput from "../../components/reduxForm/TextInput";
 import { reduxForm, Field, InjectedFormProps } from "redux-form";
 import RadioButton from "../../components/reduxForm/RadioButton";
-import { connect } from "react-redux";
 import router from "next/router";
 import { User } from "../../interfaces/User";
 import { BasicProfileFormValues } from "../../interfaces/Basics";

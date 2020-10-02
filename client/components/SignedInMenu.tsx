@@ -1,15 +1,13 @@
 import React from "react";
 import { Menu, Image, Dropdown, Icon } from "semantic-ui-react";
 import Link from "next/link";
-import { connect } from "react-redux";
 import { User } from "../interfaces/User";
 
 interface SignedInMenuInterface {
   user: User;
-  logoutUser: Function;
 }
 
-const SignedInMenu = ({ user, logoutUser }: SignedInMenuInterface) => {
+const SignedInMenu = ({ user }: SignedInMenuInterface) => {
   const { firstName, lastName } = user;
   return (
     <Menu.Item position="right">

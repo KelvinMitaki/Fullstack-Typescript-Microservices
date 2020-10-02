@@ -1,6 +1,5 @@
 import React from "react";
 import { Segment, Grid, Icon } from "semantic-ui-react";
-import { connect } from "react-redux";
 
 const EventDetailedInfo = () => {
   // const test = new Date(singleEvent.date.toDate());
