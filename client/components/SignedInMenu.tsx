@@ -2,7 +2,6 @@ import React from "react";
 import { Menu, Image, Dropdown, Icon } from "semantic-ui-react";
 import Link from "next/link";
 import { connect } from "react-redux";
-import { LogoutUser, logoutUser } from "../redux/actions";
 import { User } from "../interfaces/User";
 
 interface SignedInMenuInterface {
@@ -44,7 +43,7 @@ const SignedInMenu = ({ user, logoutUser }: SignedInMenuInterface) => {
           <Dropdown.Item
             text="Sign Out"
             icon="power"
-            onClick={(): LogoutUser => logoutUser()}
+            // onClick={(): LogoutUser => logoutUser()}
           />
         </Dropdown.Menu>
       </Dropdown>
@@ -56,4 +55,4 @@ const SignedInMenu = ({ user, logoutUser }: SignedInMenuInterface) => {
     </Menu.Item>
   );
 };
-export default connect(null, { logoutUser })(SignedInMenu);
+export default SignedInMenu;

@@ -10,44 +10,29 @@ import {
 import Layout from "../../components/Layout";
 import SettingsNav from "../../components/SettingsNav";
 import TextInput from "../../components/reduxForm/TextInput";
-import { reduxForm, Field } from "redux-form";
+import { reduxForm, Field, InjectedFormProps } from "redux-form";
 import RadioButton from "../../components/reduxForm/RadioButton";
 import { connect } from "react-redux";
-import { basicProfile } from "../../redux/actions";
 import router from "next/router";
-import { StoreState } from "../../interfaces/StoreState";
 import { User } from "../../interfaces/User";
-import { GetInitialProps } from "../../interfaces/GetInitialProps";
 import { BasicProfileFormValues } from "../../interfaces/Basics";
+import Axios from "axios";
 
-interface Basics {
+interface Props {
   user: User | null;
-  handleSubmit: Function;
-  basicProfile: Function;
-  loading: boolean;
-  pristine: boolean;
 }
 
-export class basics extends Component<Basics> {
-  componentDidMount() {
-    if (this.props.user && !this.props.user.isLoggedIn) {
-      router.replace("/login");
-    }
-  }
-  static async getInitialProps({ res, store }: GetInitialProps) {
-    if (
-      store &&
-      res &&
-      store.getState().auth.user &&
-      !store.getState().auth.user?.isLoggedIn
-    ) {
-      res.writeHead(301, { location: "/login" });
-      res.end();
-      return { store };
-    }
-    return {
-      initialValues: store.getState().auth.user && store.getState().auth.user
-    };
+export class basics extends Component<
+  InjectedFormProps<BasicProfileFormValues, Props> & Props
+> {
+  state = {
+    loading: false
+  };
+  async basicProfile(formValues: BasicProfileFormValues) {
+    this.setState({ loading: true });
+
+    await Axios.post("/api/user/basics", formValues);
+    this.setState({ loading: false });
   }
   render() {
     return (
@@ -60,7 +45,7 @@ export class basics extends Component<Basics> {
                 <Form
                   onSubmit={this.props.handleSubmit(
                     (formValues: BasicProfileFormValues) =>
-                      this.props.basicProfile(formValues)
+                      this.basicProfile(formValues)
                   )}
                 >
                   <Field
@@ -104,11 +89,11 @@ export class basics extends Component<Basics> {
                   />
                   <Divider />
                   <Button
-                    disabled={this.props.pristine || this.props.loading}
+                    disabled={this.props.pristine || this.state.loading}
                     size="large"
                     positive
                     content="Update Profile"
-                    loading={this.props.loading}
+                    loading={this.state.loading}
                   />
                   {/* {console.log(this.props)} */}
                 </Form>
@@ -133,14 +118,9 @@ export class basics extends Component<Basics> {
     );
   }
 }
-const mapStateToProps = (state: StoreState) => {
-  return {
-    loading: state.auth.loading,
-    user: state.auth.user
-  };
-};
-export default reduxForm({
+
+export default reduxForm<BasicProfileFormValues, Props>({
   form: "basics",
   enableReinitialize: true,
   destroyOnUnmount: false
-})(connect(mapStateToProps, { basicProfile })(basics));
+})(basics);
