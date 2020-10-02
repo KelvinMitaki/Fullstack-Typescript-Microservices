@@ -37,11 +37,11 @@ export const currentUser = (context: AppContext) => async (
   dispatch: Dispatch
 ) => {
   try {
-    // const res = await fetch("http://localhost:3000/api/current_user", {
-    //   headers: headers
-    // });
     const res = await buildClient(context).get("/api/user/current_user");
-    dispatch<CurrentUser>({ type: Types.CurrentUser, payload: res.data });
+    dispatch<CurrentUser>({
+      type: Types.CurrentUser,
+      payload: res.data.currentUser
+    });
   } catch (error) {
     console.log(error);
   }
@@ -57,8 +57,8 @@ export const registerUser = (formValues: RegisterFormValues) => async (
 ) => {
   try {
     dispatch<RegisterUser>({ type: Types.RegisterStart });
-    await Axios.post("/api/register", formValues, { baseURL });
-    Router.push("/login");
+    await Axios.post("/api/user/register", formValues);
+    Router.push("/");
     dispatch({ type: Types.RegisterStop });
   } catch (error) {
     console.log(error.response);

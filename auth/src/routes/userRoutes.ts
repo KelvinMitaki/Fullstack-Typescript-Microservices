@@ -22,6 +22,7 @@ declare global {
 route.get("/user/current_user", (req: Request, res: Response): void => {
   if (!req.session!.jwt) {
     res.send({ currentUser: null });
+    return;
   }
   req.currentUser = jwt.verify(req.session!.jwt, process.env.JWT_KEY!) as Jwt;
   res.send({ currentUser: req.currentUser });
