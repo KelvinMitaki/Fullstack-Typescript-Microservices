@@ -5,7 +5,7 @@ interface RadioInputInterface {
   label: string;
   type: string;
   width?: number;
-  input: { [key: string]: string };
+  input?: { [key: string]: string };
 }
 
 const RadioInput = ({ input, type, label }: RadioInputInterface) => {
