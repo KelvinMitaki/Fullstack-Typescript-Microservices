@@ -38,6 +38,7 @@ export const currentUser = (context: AppContext) => async (
 ) => {
   try {
     const res = await buildClient(context).get("/api/user/current_user");
+    console.log(res.data);
     dispatch<CurrentUser>({
       type: Types.CurrentUser,
       payload: res.data.currentUser

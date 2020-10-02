@@ -64,11 +64,8 @@ route.post(
     });
 
     await user.save();
-
-    const userJwt = jwt.sign(
-      { _id: user._id, email: user.email },
-      process.env.JWT_KEY!
-    );
+    // @ts-ignore
+    const userJwt = jwt.sign({ ...user._doc }, process.env.JWT_KEY!);
     req.session = {
       ...req.session,
       jwt: userJwt
@@ -101,10 +98,8 @@ route.post(
       res.status(404).send({ message: "invalid email or password" });
       return;
     }
-    const userJwt = jwt.sign(
-      { _id: user._id, email: user.email },
-      process.env.JWT_KEY!
-    );
+    // @ts-ignore
+    const userJwt = jwt.sign({ ...user._doc }, process.env.JWT_KEY!);
     req.session = {
       ...req.session,
       jwt: userJwt

@@ -15,6 +15,7 @@ import { StoreState } from "../interfaces/StoreState";
 (Router as any).onRouteChangeError = () => nProgress.done();
 
 const Layout = ({ children, title, user }: LayoutInterFace) => {
+  console.log(user);
   return (
     <React.Fragment>
       <Head>
@@ -81,9 +82,4 @@ const Layout = ({ children, title, user }: LayoutInterFace) => {
     </React.Fragment>
   );
 };
-const mapStateToProps = (state: StoreState) => {
-  return {
-    user: state.auth.user
-  };
-};
-export default connect(mapStateToProps)(Layout);
+export default Layout;
