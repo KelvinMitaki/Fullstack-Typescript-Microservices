@@ -12,10 +12,10 @@ app.use(bodyParser.json());
 app.use(
   CookieSession({
     signed: true,
-    secure: true,
     sameSite: true,
     httpOnly: true,
-    secret: process.env!.COOKIE_SECRET
+    secret: process.env!.COOKIE_SECRET,
+    maxAge: 1000 * 60 * 60 * 24 * 7
   })
 );
 

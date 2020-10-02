@@ -80,7 +80,7 @@ export const loginUser = (formValues: LoginFormValues) => async (
 ) => {
   try {
     dispatch<LoginUser>({ type: Types.LoadingStart });
-    await Axios.post("/api/login", formValues, { baseURL });
+    await Axios.post("/api/user/login", formValues);
     Router.push("/");
     dispatch<LoginUser>({ type: Types.LoadingStop });
   } catch (error) {
