@@ -11,17 +11,25 @@ import Axios from "axios";
 
 interface Props {
   user: User | null;
-  loginError: string | null;
   invalid: boolean;
 }
 
+interface State {
+  loading: boolean;
+  errors: { message: string; field?: string }[] | null;
+}
+
 export class Login extends Component<
-  InjectedFormProps<LoginFormValues, Props> & Props
+  InjectedFormProps<LoginFormValues, Props> & Props,
+  State
 > {
-  state = {
-    loading: false,
-    error: null
-  };
+  constructor(props: InjectedFormProps<LoginFormValues, Props> & Props) {
+    super(props);
+    this.state = {
+      loading: false,
+      errors: null
+    };
+  }
   async loginUser(formValues: LoginFormValues) {
     try {
       this.setState({ loading: true });
@@ -29,11 +37,11 @@ export class Login extends Component<
       Router.push("/");
       this.setState({ loading: false });
     } catch (error) {
-      this.setState({ loading: false, error: error.response.data });
+      const errors = error.response.data.errors;
+      this.setState({ loading: false, errors: errors });
     }
   }
   render() {
-    this.state.error && console.log(this.state.error);
     return (
       <Layout title="Login" user={this.props.user}>
         <div className="segment profile">
@@ -70,7 +78,10 @@ export class Login extends Component<
                 </Form>
 
                 <h5 style={{ color: "red", textAlign: "center" }}>
-                  {this.props.loginError}
+                  {this.state.errors &&
+                    this.state.errors.map(err => (
+                      <p key={err.message}>{err.message}</p>
+                    ))}
                 </h5>
               </Grid.Column>
 
