@@ -13,11 +13,6 @@ export class RequestValidationError extends CustomError {
     Object.setPrototypeOf(this, RequestValidationError.prototype);
   }
   serializeErrors = (): ErrorResult[] => {
-    return this.errors.map(
-      (err: ValidationError): ErrorResult => ({
-        message: err.msg,
-        field: err.param
-      })
-    );
+    return [{ message: this.errors[0].msg, field: this.errors[0].param }];
   };
 }
