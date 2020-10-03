@@ -1,7 +1,9 @@
 import express from "express";
 import bodyParser from "body-parser";
+import "express-async-errors";
 import CookieSession from "cookie-session";
 import { useroutes } from "./routes/userRoutes";
+import { errorHandler, NotFound } from "@kmevents/common";
 
 const app = express();
 
@@ -20,5 +22,16 @@ app.use(
 );
 
 app.use("/api", useroutes);
+
+// NOT FOUND ROUTE
+app.all(
+  "*",
+  async (): Promise<void> => {
+    throw new NotFound();
+  }
+);
+
+// ERROR HANDLING
+app.use(errorHandler);
 
 export { app };
