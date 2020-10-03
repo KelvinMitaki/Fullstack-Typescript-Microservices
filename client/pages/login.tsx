@@ -139,6 +139,7 @@ const validate = (formValues: LoginFormValues) => {
   }
   return errors;
 };
-export default reduxForm<LoginFormValues, Props>({ form: "login", validate })(
-  Login
-);
+export default reduxForm<LoginFormValues, Props>({
+  form: "login",
+  validate
+})(Login);

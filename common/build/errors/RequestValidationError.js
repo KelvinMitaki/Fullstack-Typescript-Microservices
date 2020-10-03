@@ -22,10 +22,7 @@ var RequestValidationError = /** @class */ (function (_super) {
         _this.errors = errors;
         _this.statusCode = 401;
         _this.serializeErrors = function () {
-            return _this.errors.map(function (err) { return ({
-                message: err.msg,
-                field: err.param
-            }); });
+            return [{ message: _this.errors[0].msg, field: _this.errors[0].param }];
         };
         Object.setPrototypeOf(_this, RequestValidationError.prototype);
         return _this;

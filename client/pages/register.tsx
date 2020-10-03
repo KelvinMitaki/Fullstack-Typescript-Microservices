@@ -12,16 +12,33 @@ import Axios from "axios";
 
 interface Props {
   user: User | null;
-  registerError: string | null;
-  registerLoading: boolean;
+}
+
+interface State {
+  errors: { message: string; field?: string }[] | null;
+  loading: boolean;
 }
 
 export class register extends Component<
-  InjectedFormProps<RegisterFormValues, Props> & Props
+  InjectedFormProps<RegisterFormValues, Props> & Props,
+  State
 > {
+  constructor(props: InjectedFormProps<RegisterFormValues, Props> & Props) {
+    super(props);
+    this.state = {
+      errors: null,
+      loading: false
+    };
+  }
   async registerUser(formValues: RegisterFormValues) {
-    await Axios.post("/api/user/register", formValues);
-    Router.push("/");
+    try {
+      this.setState({ loading: true });
+      await Axios.post("/api/user/register", formValues);
+      this.setState({ loading: false });
+      Router.push("/");
+    } catch (error) {
+      this.setState({ loading: false, errors: error.response.data.errors });
+    }
   }
   render() {
     return (
@@ -74,10 +91,15 @@ export class register extends Component<
                 fluid
                 content="Register"
                 primary
-                disabled={this.props.invalid || this.props.registerLoading}
-                loading={this.props.registerLoading}
+                disabled={this.props.invalid || this.state.loading}
+                loading={this.state.loading}
               />
-              <h5 style={{ color: "red" }}>{this.props.registerError}</h5>
+              <h5 style={{ color: "red" }}>
+                {this.state.errors &&
+                  this.state.errors.map(err => (
+                    <p key={err.message}>{err.message}</p>
+                  ))}
+              </h5>
             </Form>
             <Message attached="bottom" warning>
               <Icon name="help" />
