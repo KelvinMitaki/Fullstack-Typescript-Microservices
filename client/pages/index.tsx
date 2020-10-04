@@ -13,14 +13,16 @@ import Router from "next/router";
 import Layout from "../components/Layout";
 import { User } from "../interfaces/User";
 import { NextPageContext } from "next";
+import { UserContext, UserContextProps } from "../contexts/userContext";
+import withAuth from "../hocs/withAuth";
 
 interface Props {
   user: User | null;
+  test: string;
 }
 
 export class events extends Component<Props> {
   render() {
-    console.log(this.props.user);
     return (
       <Layout title="Events" user={this.props.user}>
         <div className="profile">
@@ -127,4 +129,4 @@ export class events extends Component<Props> {
   }
 }
 
-export default events;
+export default withAuth(events);
