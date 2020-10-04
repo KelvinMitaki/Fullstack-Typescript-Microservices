@@ -1,7 +1,7 @@
 import Axios, { AxiosInstance } from "axios";
-import { AppContext } from "next/app";
+import { NextPageContext } from "next";
 
-const buildClient = ({ ctx: { req } }: AppContext): AxiosInstance => {
+const buildClient = ({ req }: NextPageContext): AxiosInstance => {
   if (typeof window === "undefined") {
     return Axios.create({
       baseURL:

@@ -12,10 +12,12 @@ import {
   Icon,
   Button
 } from "semantic-ui-react";
-import { GetServerSideProps, NextPageContext } from "next";
+import { NextPageContext } from "next";
+import ErrorPage from "next/error";
 import { User } from "../../interfaces/User";
 import Layout from "../../components/Layout";
 import withAuth from "../../hocs/withAuth";
+import buildClient from "../../api/build-client";
 
 const panes = [
   { menuItem: "All Events", pane: { key: "allEvents" } },
@@ -26,14 +28,27 @@ const panes = [
 
 interface ProfileInterface {
   user: User | null;
+  profileUser: User | null;
+  errorStatus: number | null;
 }
 
 export class Profile extends Component<ProfileInterface> {
-  static getInitialProps(context: NextPageContext) {
-    console.log(context.query);
-    return {};
+  static async getInitialProps(context: NextPageContext) {
+    try {
+      const { data } = await buildClient(context).get(
+        `/api/user/profile/${context.query.userId}`
+      );
+      return { profileUser: data };
+    } catch (error) {
+      // IF ERRROR REDIRECT TO ERROR PAGE
+      return { errorStatus: error.response.status };
+    }
   }
   render() {
+    console.log("from profile", this.props.profileUser);
+    if (this.props.errorStatus) {
+      return <ErrorPage statusCode={this.props.errorStatus} />;
+    }
     if (this.props.user) {
       const {
         firstName,
@@ -56,7 +71,7 @@ export class Profile extends Component<ProfileInterface> {
         status
       } = this.props.user;
       return (
-        <Layout title="Profile" user={this.props.user}>
+        <Layout title="Profile">
           <div className="profile">
             <Grid stackable>
               <Grid.Column width={16}>
@@ -208,4 +223,4 @@ export class Profile extends Component<ProfileInterface> {
   }
 }
 
-export default Profile;
+export default withAuth(Profile);

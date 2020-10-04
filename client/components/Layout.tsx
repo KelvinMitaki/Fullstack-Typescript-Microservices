@@ -15,7 +15,6 @@ import { UserContext } from "../contexts/userContext";
 
 const Layout = ({ children, title }: LayoutInterFace) => {
   const { user } = useContext(UserContext);
-  console.log(user);
   return (
     <React.Fragment>
       <Head>

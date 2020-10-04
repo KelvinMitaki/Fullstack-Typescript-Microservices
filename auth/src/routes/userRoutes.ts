@@ -164,15 +164,11 @@ route.get(
   "/user/profile/:profileId",
   auth,
   async (req: Request, res: Response): Promise<void> => {
-    try {
-      const user = await User.findById(req.params.profileId);
-      if (!user) {
-        throw new NotFound();
-      }
-      res.send(user);
-    } catch (error) {
-      throw new BadRequestError("Error fetching user");
+    const user = await User.findById(req.params.profileId);
+    if (!user) {
+      throw new NotFound();
     }
+    res.send(user);
   }
 );
 
