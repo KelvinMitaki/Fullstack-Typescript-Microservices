@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Layout from "../../components/Layout";
 import { Grid, Segment, Header, Form, Select, Button } from "semantic-ui-react";
+import withAuth from "../../hocs/withAuth";
 const category = [
   { key: "drinks", text: "Drinks", value: "drinks" },
   { key: "culture", text: "Culture", value: "culture" },
@@ -129,4 +130,4 @@ export class event extends Component {
   }
 }
 
-export default event;
+export default withAuth(event);

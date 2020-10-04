@@ -16,6 +16,7 @@ import router from "next/router";
 import { User } from "../../interfaces/User";
 import { BasicProfileFormValues } from "../../interfaces/Basics";
 import Axios from "axios";
+import withAuth from "../../hocs/withAuth";
 
 interface Props {
   user: User | null;
@@ -118,8 +119,10 @@ export class basics extends Component<
   }
 }
 
-export default reduxForm<BasicProfileFormValues, Props>({
-  form: "basics",
-  enableReinitialize: true,
-  destroyOnUnmount: false
-})(basics);
+export default withAuth(
+  reduxForm<BasicProfileFormValues, Props>({
+    form: "basics",
+    enableReinitialize: true,
+    destroyOnUnmount: false
+  })(basics)
+);

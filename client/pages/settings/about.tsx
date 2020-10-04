@@ -14,6 +14,7 @@ import {
 import SettingsNav from "../../components/SettingsNav";
 import TextInput from "../../components/reduxForm/TextInput";
 import { User } from "../../interfaces/User";
+import withAuth from "../../hocs/withAuth";
 
 const interests = [
   { key: "drinks", text: "Drinks", value: "drinks" },
@@ -80,4 +81,4 @@ export class about extends Component<Props> {
   }
 }
 
-export default about;
+export default withAuth(about);

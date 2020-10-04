@@ -1,30 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-interface JWT {
+import "cookie-session";
+export interface JWT {
     firstName: string;
     lastName: string;
     email: string;
-    password: string;
-    knownAs?: string;
-    gender?: string;
-    birthDate?: Date;
-    homeTown?: string;
-    status?: string;
-    aboutMe?: string;
-    hobbies?: string[];
-    occupation?: string;
-    originCountry?: string;
-    events?: {
-        [key: string]: string;
-    }[];
-    following?: {
-        [key: string]: string;
-    }[];
-    followers?: {
-        [key: string]: string;
-    }[];
-    photos?: string[];
-    age?: number;
-    interests?: string[];
+    _id: string;
 }
 declare global {
     namespace Express {
@@ -34,4 +14,3 @@ declare global {
     }
 }
 export declare const auth: (req: Request, res: Response, next: NextFunction) => void;
-export {};

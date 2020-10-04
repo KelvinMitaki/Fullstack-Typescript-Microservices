@@ -13,6 +13,7 @@ import Layout from "../../components/Layout";
 import CropperInput from "../../components/cropper/CropperInput";
 import SettingsNav from "../../components/SettingsNav";
 import { User } from "../../interfaces/User";
+import withAuth from "../../hocs/withAuth";
 
 interface Props {
   loading: boolean;
@@ -177,4 +178,4 @@ Props) => {
   );
 };
 
-export default PhotosPage;
+export default withAuth(PhotosPage);

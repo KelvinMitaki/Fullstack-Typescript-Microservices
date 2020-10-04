@@ -15,6 +15,7 @@ import {
 } from "semantic-ui-react";
 import { User } from "../interfaces/User";
 import { NextPageContext } from "next";
+import withAuth from "../hocs/withAuth";
 
 const panes = [
   { menuItem: "All Events", pane: { key: "allEvents" } },
@@ -163,4 +164,4 @@ export class Profile extends Component<ProfileInterface> {
     }
   }
 }
-export default Profile;
+export default withAuth(Profile);

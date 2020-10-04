@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Container, Menu, Button } from "semantic-ui-react";
 import Head from "next/head";
 import Router from "next/router";
 import nProgress from "nprogress";
 import SignedInMenu from "./SignedInMenu";
 import { LayoutInterFace } from "../interfaces/Layout";
+import { UserContext } from "../contexts/userContext";
 
 (Router as any).onRouteChangeStart = () => {
   nProgress.start();
@@ -12,7 +13,9 @@ import { LayoutInterFace } from "../interfaces/Layout";
 (Router as any).onRouteChangeComplete = () => nProgress.done();
 (Router as any).onRouteChangeError = () => nProgress.done();
 
-const Layout = ({ children, title, user }: LayoutInterFace) => {
+const Layout = ({ children, title }: LayoutInterFace) => {
+  const { user } = useContext(UserContext);
+  console.log(user);
   return (
     <React.Fragment>
       <Head>

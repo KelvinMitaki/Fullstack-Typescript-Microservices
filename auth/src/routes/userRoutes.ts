@@ -8,25 +8,10 @@ import { BadRequestError, validateRequest } from "@kmevents/common";
 const route = Router();
 
 export interface Jwt {
+  _id: string;
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
-  knownAs?: string;
-  gender?: string;
-  birthDate?: Date;
-  homeTown?: string;
-  status?: string;
-  aboutMe?: string;
-  hobbies?: string[];
-  occupation?: string;
-  originCountry?: string;
-  events?: { [key: string]: string }[];
-  following?: { [key: string]: string }[];
-  followers?: { [key: string]: string }[];
-  photos?: string[];
-  age?: number;
-  interests?: string[];
 }
 
 declare global {
@@ -37,14 +22,25 @@ declare global {
   }
 }
 
-route.get("/user/current_user", (req: Request, res: Response): void => {
-  if (!req.session!.jwt) {
-    res.send({ currentUser: null });
-    return;
+route.get(
+  "/user/current_user",
+  async (req: Request, res: Response): Promise<void> => {
+    if (!req.session!.jwt) {
+      res.send({ currentUser: null });
+      return;
+    }
+    try {
+      req.currentUser = jwt.verify(
+        req.session!.jwt,
+        process.env.JWT_KEY!
+      ) as Jwt;
+      const user = await User.findById(req.currentUser);
+      res.send({ currentUser: user });
+    } catch (error) {
+      res.send({ currentUser: null });
+    }
   }
-  req.currentUser = jwt.verify(req.session!.jwt, process.env.JWT_KEY!) as Jwt;
-  res.send({ currentUser: req.currentUser });
-});
+);
 
 route.post(
   "/user/register",
@@ -75,7 +71,15 @@ route.post(
 
     await user.save();
     // @ts-ignore
-    const userJwt = jwt.sign({ ...user._doc }, process.env.JWT_KEY!);
+    const userJwt = jwt.sign(
+      {
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        _id: user._id
+      },
+      process.env.JWT_KEY!
+    );
     req.session = {
       ...req.session,
       jwt: userJwt
@@ -103,7 +107,15 @@ route.post(
       throw new BadRequestError("invalid email or password");
     }
     // @ts-ignore
-    const userJwt = jwt.sign({ ...user._doc }, process.env.JWT_KEY!);
+    const userJwt = jwt.sign(
+      {
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        _id: user._id
+      },
+      process.env.JWT_KEY!
+    );
     req.session = {
       ...req.session,
       jwt: userJwt
