@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import router from "next/router";
+import Router from "next/router";
 import {
   Grid,
   Segment,
@@ -18,6 +18,7 @@ import { User } from "../../interfaces/User";
 import Layout from "../../components/Layout";
 import withAuth from "../../hocs/withAuth";
 import buildClient from "../../api/build-client";
+import { UserContext } from "../../contexts/userContext";
 
 const panes = [
   { menuItem: "All Events", pane: { key: "allEvents" } },
@@ -45,11 +46,10 @@ export class Profile extends Component<ProfileInterface> {
     }
   }
   render() {
-    console.log("from profile", this.props.profileUser);
     if (this.props.errorStatus) {
       return <ErrorPage statusCode={this.props.errorStatus} />;
     }
-    if (this.props.user) {
+    if (this.props.profileUser) {
       const {
         firstName,
         lastName,
@@ -69,7 +69,7 @@ export class Profile extends Component<ProfileInterface> {
         originCountry,
         photos,
         status
-      } = this.props.user;
+      } = this.props.profileUser;
       return (
         <Layout title="Profile">
           <div className="profile">
@@ -140,14 +140,29 @@ export class Profile extends Component<ProfileInterface> {
               </Grid.Column>
               <Grid.Column width={4}>
                 <Segment>
-                  {}
-                  <Button
-                    // onClick={async () => await followUser(user)}
-                    color="teal"
-                    fluid
-                    basic
-                    content="Follow"
-                  />
+                  <UserContext.Consumer>
+                    {({ user }) => (
+                      <React.Fragment>
+                        {user?._id === this.props.profileUser?._id ? (
+                          <Button
+                            onClick={() => Router.push("/settings/basics")}
+                            color="teal"
+                            fluid
+                            basic
+                            content="Edit Profile"
+                          />
+                        ) : (
+                          <Button
+                            // onClick={async () => await followUser(user)}
+                            color="teal"
+                            fluid
+                            basic
+                            content="Follow"
+                          />
+                        )}
+                      </React.Fragment>
+                    )}
+                  </UserContext.Consumer>
                 </Segment>
               </Grid.Column>
               <Grid.Column width={12}>
