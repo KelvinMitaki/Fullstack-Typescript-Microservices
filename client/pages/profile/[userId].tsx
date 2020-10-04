@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Layout from "../components/Layout";
 import router from "next/router";
 import {
   Grid,
@@ -13,9 +12,10 @@ import {
   Icon,
   Button
 } from "semantic-ui-react";
-import { User } from "../interfaces/User";
-import { NextPageContext } from "next";
-import withAuth from "../hocs/withAuth";
+import { GetServerSideProps, NextPageContext } from "next";
+import { User } from "../../interfaces/User";
+import Layout from "../../components/Layout";
+import withAuth from "../../hocs/withAuth";
 
 const panes = [
   { menuItem: "All Events", pane: { key: "allEvents" } },
@@ -29,9 +29,32 @@ interface ProfileInterface {
 }
 
 export class Profile extends Component<ProfileInterface> {
+  static getInitialProps(context: NextPageContext) {
+    console.log(context.query);
+    return {};
+  }
   render() {
     if (this.props.user) {
-      const { firstName, lastName, createdAt } = this.props.user;
+      const {
+        firstName,
+        lastName,
+        createdAt,
+        homeTown,
+        birthDate,
+        email,
+        aboutMe,
+        events,
+        followers,
+        following,
+        gender,
+        hobbies,
+        interests,
+        knownAs,
+        occupation,
+        originCountry,
+        photos,
+        status
+      } = this.props.user;
       return (
         <Layout title="Profile" user={this.props.user}>
           <div className="profile">
@@ -46,9 +69,12 @@ export class Profile extends Component<ProfileInterface> {
                           {firstName} {lastName}{" "}
                         </Header>
                         <br />
-                        <Header as="h3">programmer </Header>
+                        {occupation && <Header as="h3">{occupation} </Header>}
                         <br />
-                        <Header as="h3">20 years `Lives in Rongai</Header>
+                        <Header as="h3">
+                          {birthDate && new Date(birthDate) + " years, "}{" "}
+                          {homeTown && `Lives in ${homeTown}`}
+                        </Header>
                       </Item.Content>
                     </Item>
                   </Item.Group>
@@ -58,43 +84,48 @@ export class Profile extends Component<ProfileInterface> {
                 <Segment>
                   <Grid columns={2}>
                     <Grid.Column width={10}>
-                      <Header icon="smile" content="About Display Name" />
-
-                      <p>
-                        I am a: <strong>programmer</strong>
-                      </p>
-
-                      <p>
-                        Originally from <strong>Rongai </strong>
-                      </p>
+                      <Header icon="smile" content={`About ${firstName}`} />
+                      {occupation && (
+                        <p>
+                          I am a: <strong>{occupation}</strong>
+                        </p>
+                      )}
+                      {homeTown && (
+                        <p>
+                          Originally from <strong>{homeTown} </strong>
+                        </p>
+                      )}
 
                       <p>
                         Member Since:{" "}
                         <strong>{new Date(createdAt).toDateString()} </strong>
                       </p>
-                      <p>
-                        Description of the user:
-                        <strong>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Repellendus sunt nulla iusto quae laborum
-                          delectus ducimus nihil voluptatibus culpa. Provident?
-                        </strong>
-                      </p>
+                      {aboutMe && (
+                        <p>
+                          Description of the user:
+                          <strong>{aboutMe}</strong>
+                        </p>
+                      )}
                     </Grid.Column>
                     <Grid.Column width={6}>
                       <Header icon="heart outline" content="Interests" />
-                      <List>
-                        <Item key={Math.random()}>
-                          <Icon name="heart" />
-                          <Item.Content>programming </Item.Content>
-                        </Item>
-                      </List>
+                      {interests && interests.length !== 0
+                        ? interests.map(interest => (
+                            <List key={interest}>
+                              <Item>
+                                <Icon name="heart" />
+                                <Item.Content>{interest} </Item.Content>
+                              </Item>
+                            </List>
+                          ))
+                        : "No interests for this user"}
                     </Grid.Column>
                   </Grid>
                 </Segment>
               </Grid.Column>
               <Grid.Column width={4}>
                 <Segment>
+                  {}
                   <Button
                     // onClick={async () => await followUser(user)}
                     color="teal"
@@ -107,10 +138,17 @@ export class Profile extends Component<ProfileInterface> {
               <Grid.Column width={12}>
                 <Segment attached>
                   <Header icon="image" content="Photos" />
-
-                  <Image.Group size="small">
-                    <Image src="/1.png" />
-                  </Image.Group>
+                  {photos && photos.length !== 0 ? (
+                    photos.map(photo => (
+                      <Image.Group size="small" key={photo}>
+                        <Image src={`${photo}`} />
+                      </Image.Group>
+                    ))
+                  ) : (
+                    <Image.Group size="small">
+                      <Image src="/1.png" />
+                    </Image.Group>
+                  )}
                 </Segment>
               </Grid.Column>
               <Grid.Column width={12}>
@@ -130,18 +168,23 @@ export class Profile extends Component<ProfileInterface> {
                   <br />
 
                   <Card.Group stackable itemsPerRow={5}>
-                    <Card as="a" to={`/events/`}>
-                      <Image src="/1.png" />
-                      <Card.Content>
-                        <Card.Header textAlign="center">
-                          Lorem ipsum, dolor sit amet consectetur adipisicing
-                          elit. Harum, laboriosam?
-                        </Card.Header>
-                        <Card.Meta textAlign="center">
-                          2 May 2020 21:33
-                        </Card.Meta>
-                      </Card.Content>
-                    </Card>
+                    {events &&
+                      events.length !== 0 &&
+                      events.map(event => (
+                        <Card as="a" to={`/events/${event._id}`}>
+                          {/* MAKE REQUEST TO FETCH EVENT DETAILS */}
+                          <Image src="/1.png" />
+                          <Card.Content>
+                            <Card.Header textAlign="center">
+                              Lorem ipsum, dolor sit amet consectetur
+                              adipisicing elit. Harum, laboriosam?
+                            </Card.Header>
+                            <Card.Meta textAlign="center">
+                              2 May 2020 21:33
+                            </Card.Meta>
+                          </Card.Content>
+                        </Card>
+                      ))}
                   </Card.Group>
                 </Segment>
               </Grid.Column>
@@ -164,4 +207,5 @@ export class Profile extends Component<ProfileInterface> {
     }
   }
 }
-export default withAuth(Profile);
+
+export default Profile;

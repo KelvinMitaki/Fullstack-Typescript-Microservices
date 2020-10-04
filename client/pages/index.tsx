@@ -20,7 +20,7 @@ interface Props {
 export class events extends Component<Props> {
   render() {
     return (
-      <Layout title="Events" user={this.props.user}>
+      <Layout title="Events">
         <div className="profile">
           <Segment.Group>
             <Segment>

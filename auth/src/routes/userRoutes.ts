@@ -3,7 +3,12 @@ import { check, validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
-import { auth, BadRequestError, validateRequest } from "@kmevents/common";
+import {
+  auth,
+  BadRequestError,
+  NotFound,
+  validateRequest
+} from "@kmevents/common";
 
 const route = Router();
 
@@ -151,6 +156,22 @@ route.post(
       res.send(user);
     } catch (error) {
       throw new BadRequestError("error updating profile");
+    }
+  }
+);
+
+route.get(
+  "/user/profile/:profileId",
+  auth,
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const user = await User.findById(req.params.profileId);
+      if (!user) {
+        throw new NotFound();
+      }
+      res.send(user);
+    } catch (error) {
+      throw new BadRequestError("Error fetching user");
     }
   }
 );

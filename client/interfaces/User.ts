@@ -1,9 +1,9 @@
 export interface User {
+  _id: string;
   firstName: string;
   lastName: string;
   email: string;
   createdAt: string;
-  description?: string;
   knownAs?: string;
   gender?: string;
   birthDate?: Date;
@@ -13,7 +13,7 @@ export interface User {
   hobbies?: string[];
   occupation?: string;
   originCountry?: string;
-  events?: { [key: string]: string }[];
+  events?: { _id: string }[];
   following?: { [key: string]: string }[];
   followers?: { [key: string]: string }[];
   photos?: string[];

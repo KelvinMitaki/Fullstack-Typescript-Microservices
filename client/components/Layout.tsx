@@ -37,7 +37,9 @@ const Layout = ({ children, title }: LayoutInterFace) => {
             <React.Fragment>
               <Menu.Item
                 as="a"
-                onClick={() => Router.push("/profile")}
+                onClick={() =>
+                  Router.push("/profile/[userId]", `/profile/${user._id}`)
+                }
                 exact="true"
                 name="Profile"
               />

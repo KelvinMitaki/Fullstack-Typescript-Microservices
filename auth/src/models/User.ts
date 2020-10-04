@@ -5,7 +5,6 @@ interface UserAttrs {
   lastName: string;
   email: string;
   password: string;
-  description?: string;
   knownAs?: string;
   gender?: string;
   birthDate?: Date;
@@ -28,7 +27,6 @@ interface UserDoc extends mongoose.Document {
   lastName: string;
   email: string;
   password: string;
-  description?: string;
   knownAs?: string;
   gender?: string;
   birthDate?: Date;
@@ -67,9 +65,6 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true
-    },
-    description: {
-      type: String
     },
     knownAs: {
       type: String
