@@ -25,6 +25,7 @@ export const auth = (req: Request, res: Response, next: NextFunction): void => {
   try {
     const payload = jwt.verify(req.session.jwt, process.env.JWT_KEY!) as JWT;
     req.currentUser = payload;
+    next();
   } catch (error) {
     throw new NotAuthorizedError();
   }
