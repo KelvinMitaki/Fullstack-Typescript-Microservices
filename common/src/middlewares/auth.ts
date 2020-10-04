@@ -1,28 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import cookieSession from "cookie-session";
+import "cookie-session";
 import { NotAuthorizedError } from "../errors/NotAuthorizedError";
 
-interface JWT {
+export interface JWT {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
-  knownAs?: string;
-  gender?: string;
-  birthDate?: Date;
-  homeTown?: string;
-  status?: string;
-  aboutMe?: string;
-  hobbies?: string[];
-  occupation?: string;
-  originCountry?: string;
-  events?: { [key: string]: string }[];
-  following?: { [key: string]: string }[];
-  followers?: { [key: string]: string }[];
-  photos?: string[];
-  age?: number;
-  interests?: string[];
+  _id: string;
 }
 
 declare global {
