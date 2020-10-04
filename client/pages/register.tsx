@@ -9,6 +9,7 @@ import Router from "next/router";
 import { RegisterFormValues } from "../interfaces/Register";
 import { User } from "../interfaces/User";
 import Axios from "axios";
+import withoutAuth from "../hocs/withoutAuth";
 
 interface Props {
   user: User | null;
@@ -161,7 +162,9 @@ const validate = (formValues: RegisterFormValues) => {
   return errors;
 };
 
-export default reduxForm<RegisterFormValues, Props>({
-  form: "register",
-  validate
-})(register);
+export default withoutAuth(
+  reduxForm<RegisterFormValues, Props>({
+    form: "register",
+    validate
+  })(register)
+);

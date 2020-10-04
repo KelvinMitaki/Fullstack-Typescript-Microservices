@@ -8,6 +8,7 @@ import TextInput from "../components/reduxForm/TextInput";
 import { LoginFormValues } from "../interfaces/Login";
 import { User } from "../interfaces/User";
 import Axios from "axios";
+import withoutAuth from "../hocs/withoutAuth";
 
 interface Props {
   user: User | null;
@@ -139,7 +140,9 @@ const validate = (formValues: LoginFormValues) => {
   }
   return errors;
 };
-export default reduxForm<LoginFormValues, Props>({
-  form: "login",
-  validate
-})(Login);
+export default withoutAuth(
+  reduxForm<LoginFormValues, Props>({
+    form: "login",
+    validate
+  })(Login)
+);

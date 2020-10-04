@@ -3,11 +3,11 @@ import Router from "next/router";
 import { NextPageContext } from "next";
 import { UserContext } from "../contexts/userContext";
 
-const withAuth = (WrappedComponent: any) => {
+const withoutAuth = (WrappedComponent: any) => {
   const WithConditionalRedirectWrapper = (props: any): JSX.Element => {
     const { user } = useContext(UserContext);
-    if (typeof window !== "undefined" && !user) {
-      Router.push("/login");
+    if (typeof window !== "undefined" && user) {
+      Router.back();
       return <></>;
     }
     return <WrappedComponent {...props} />;
@@ -16,8 +16,8 @@ const withAuth = (WrappedComponent: any) => {
   WithConditionalRedirectWrapper.getInitialProps = async (
     ctx: NextPageContext
   ) => {
-    if (typeof window === "undefined" && !ctx.req?.headers.cookie && ctx.res) {
-      ctx.res.writeHead(302, { Location: "/login" });
+    if (typeof window === "undefined" && ctx.req?.headers.cookie && ctx.res) {
+      ctx.res.writeHead(302, { Location: "/" });
       ctx.res.end();
     }
     let componentProps = {};
@@ -29,4 +29,4 @@ const withAuth = (WrappedComponent: any) => {
   return WithConditionalRedirectWrapper;
 };
 
-export default withAuth;
+export default withoutAuth;
