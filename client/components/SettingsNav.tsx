@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import Link from "next/link";
 import { Menu, Header } from "semantic-ui-react";
+import { UserContext } from "../contexts/userContext";
 
 const SettingsNav = () => {
+  const { user } = useContext(UserContext);
   return (
     <React.Fragment>
       <Menu vertical>
@@ -33,7 +35,7 @@ const SettingsNav = () => {
           content="Account"
         />
         <Menu.Item>
-          <Link href="/profile">
+          <Link href={`/profile/${user?._id}`}>
             <a>My Account</a>
           </Link>
         </Menu.Item>

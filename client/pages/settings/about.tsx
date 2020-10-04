@@ -19,6 +19,7 @@ import { Field, InjectedFormProps, reduxForm } from "redux-form";
 import RadioButton from "../../components/reduxForm/RadioButton";
 import { UserContext } from "../../contexts/userContext";
 import Axios from "axios";
+import { connect } from "react-redux";
 
 const interests = [
   { key: "drinks", text: "Drinks", value: "drinks" },
@@ -42,6 +43,7 @@ interface State {
   loading: boolean;
   error: string | null;
 }
+let fetchedUser = {};
 const about = (props: InjectedFormProps<FormValues, Props> & Props) => {
   const { user } = useContext(UserContext);
   const [error, setError] = useState<State["error"]>(null);
@@ -58,6 +60,7 @@ const about = (props: InjectedFormProps<FormValues, Props> & Props) => {
       setError("Error updating profile");
     }
   };
+  fetchedUser = user!;
   return (
     <Layout title="About">
       <div className="profile">
@@ -152,10 +155,18 @@ const about = (props: InjectedFormProps<FormValues, Props> & Props) => {
   );
 };
 
+const mapStateToProps = () => {
+  return {
+    initialValues: fetchedUser
+  };
+};
+
 export default withAuth(
-  reduxForm<FormValues, Props>({
-    form: "about",
-    enableReinitialize: true,
-    destroyOnUnmount: false
-  })(about)
+  connect(mapStateToProps)(
+    reduxForm<FormValues, Props>({
+      form: "about",
+      enableReinitialize: true,
+      destroyOnUnmount: false
+    })(about)
+  )
 );
