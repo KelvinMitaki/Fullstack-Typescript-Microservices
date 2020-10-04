@@ -37,13 +37,11 @@ const basics = (
   const [error, SetError] = useState<State["error"]>(null);
   const basicProfile = async (formValues: BasicProfileFormValues) => {
     try {
-      console.log(formValues);
       SetLoading(true);
       await Axios.post("/api/user/profile/edit", formValues);
       Router.push(`/profile/${user?._id}`);
       SetLoading(false);
     } catch (error) {
-      console.log(error);
       SetLoading(false);
       SetError("Error updating profile");
     }

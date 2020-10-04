@@ -9,14 +9,19 @@ interface SelectInputInterface {
     value: string;
   }[];
   type?: string;
+  input: { onChange(data: any): void };
 }
 
-const SelectInput = ({ multiple, options, type }: SelectInputInterface) => {
+const SelectInput = ({
+  multiple,
+  options,
+  type,
+  input
+}: SelectInputInterface) => {
   return (
     <Form.Field>
       <Select
-        // value={input.value || null}
-        // onChange={(e, data) => input.onChange(data.value)}
+        onChange={(e, data) => input.onChange(data.value)}
         options={options}
         multiple={multiple}
         type={type}
