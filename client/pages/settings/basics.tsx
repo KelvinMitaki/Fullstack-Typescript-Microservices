@@ -12,7 +12,7 @@ import SettingsNav from "../../components/SettingsNav";
 import TextInput from "../../components/reduxForm/TextInput";
 import { reduxForm, Field, InjectedFormProps } from "redux-form";
 import RadioButton from "../../components/reduxForm/RadioButton";
-import router from "next/router";
+import Router from "next/router";
 import { User } from "../../interfaces/User";
 import { BasicProfileFormValues } from "../../interfaces/Basics";
 import Axios from "axios";
@@ -26,14 +26,21 @@ export class basics extends Component<
   InjectedFormProps<BasicProfileFormValues, Props> & Props
 > {
   state = {
-    loading: false
+    loading: false,
+    error: null
   };
-  async basicProfile(formValues: BasicProfileFormValues) {
-    this.setState({ loading: true });
-
-    await Axios.post("/api/user/basics", formValues);
-    this.setState({ loading: false });
-  }
+  basicProfile = async (formValues: BasicProfileFormValues) => {
+    try {
+      console.log(formValues);
+      this.setState({ loading: true });
+      await Axios.post("/api/user/profile/edit", formValues);
+      Router.push("/profile");
+      this.setState({ loading: false });
+    } catch (error) {
+      console.log(error);
+      this.setState({ error: "Error updating profile", loading: false });
+    }
+  };
   render() {
     return (
       <Layout title="Basics" user={this.props.user}>
@@ -95,7 +102,7 @@ export class basics extends Component<
                     content="Update Profile"
                     loading={this.state.loading}
                   />
-                  {/* {console.log(this.props)} */}
+                  <h5 style={{ color: "red" }}>{this.state.error}</h5>
                 </Form>
               </Segment>
             </Grid.Column>

@@ -127,30 +127,30 @@ route.post(
 route.post(
   "/user/profile/edit",
   auth,
-  check("email").trim().isEmail().withMessage("Please enter a valid email"),
-  check("password")
-    .trim()
-    .isLength({ min: 6 })
-    .withMessage("password must be 6 characters minimum"),
-  check("firstName").trim().notEmpty().withMessage("enter a valid firstname"),
-  check("lastName").trim().notEmpty().withMessage("enter a valid lastname"),
-  validateRequest,
   async (req: Request, res: Response): Promise<void> => {
     try {
       const { password } = req.body;
       if (password) {
         const hashedPassword = await bcrypt.hash(password, 12);
         const user = await User.findByIdAndUpdate(req.currentUser?._id, {
+          ...req.body,
           password: hashedPassword,
-          ...req.body
+          email: req.currentUser?.email,
+          firstName: req.currentUser?.firstName,
+          lastName: req.currentUser?.lastName
         });
         res.send(user);
         return;
       }
-      const user = await User.findByIdAndUpdate(req.currentUser?._id, req.body);
+      const user = await User.findByIdAndUpdate(req.currentUser?._id, {
+        ...req.body,
+        email: req.currentUser?.email,
+        firstName: req.currentUser?.firstName,
+        lastName: req.currentUser?.lastName
+      });
       res.send(user);
     } catch (error) {
-      throw new BadRequestError("error updating user");
+      throw new BadRequestError("error updating profile");
     }
   }
 );

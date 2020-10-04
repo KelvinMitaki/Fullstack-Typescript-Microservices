@@ -15,6 +15,7 @@ exports.auth = function (req, res, next) {
     try {
         var payload = jsonwebtoken_1.default.verify(req.session.jwt, process.env.JWT_KEY);
         req.currentUser = payload;
+        next();
     }
     catch (error) {
         throw new NotAuthorizedError_1.NotAuthorizedError();
