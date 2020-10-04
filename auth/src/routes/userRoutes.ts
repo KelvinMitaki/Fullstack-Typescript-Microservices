@@ -3,7 +3,7 @@ import { check, validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
-import { BadRequestError, validateRequest } from "@kmevents/common";
+import { auth, BadRequestError, validateRequest } from "@kmevents/common";
 
 const route = Router();
 
@@ -121,6 +121,37 @@ route.post(
       jwt: userJwt
     };
     res.send(user);
+  }
+);
+
+route.post(
+  "/user/profile/edit",
+  auth,
+  check("email").trim().isEmail().withMessage("Please enter a valid email"),
+  check("password")
+    .trim()
+    .isLength({ min: 6 })
+    .withMessage("password must be 6 characters minimum"),
+  check("firstName").trim().notEmpty().withMessage("enter a valid firstname"),
+  check("lastName").trim().notEmpty().withMessage("enter a valid lastname"),
+  validateRequest,
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { password } = req.body;
+      if (password) {
+        const hashedPassword = await bcrypt.hash(password, 12);
+        const user = await User.findByIdAndUpdate(req.currentUser?._id, {
+          password: hashedPassword,
+          ...req.body
+        });
+        res.send(user);
+        return;
+      }
+      const user = await User.findByIdAndUpdate(req.currentUser?._id, req.body);
+      res.send(user);
+    } catch (error) {
+      throw new BadRequestError("error updating user");
+    }
   }
 );
 
