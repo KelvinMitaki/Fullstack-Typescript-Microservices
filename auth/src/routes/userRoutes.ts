@@ -191,10 +191,13 @@ route.get(
       {
         Bucket: "e-commerce-gig",
         ContentType: "image/jpeg",
-        key
+        Key: key
       },
       (err: Error, url: string) => {
-        if (err) throw new BadRequestError("Error obtaining image url");
+        if (err) {
+          console.log(err);
+          throw new BadRequestError("Error obtaining image url");
+        }
         res.send({ key, url });
       }
     );

@@ -14,6 +14,7 @@ import CropperInput from "../../components/cropper/CropperInput";
 import SettingsNav from "../../components/SettingsNav";
 import { User } from "../../interfaces/User";
 import withAuth from "../../hocs/withAuth";
+import axios from "axios";
 
 interface Props {
   loading: boolean;
@@ -32,7 +33,7 @@ const PhotosPage = ({
 //   updateProfilePhoto
 Props) => {
   const [files, setFiles] = useState<{ [key: string]: string }[]>([]);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<Blob | null>(null);
   useEffect(() => {
     return () => {
       files.forEach((file: { [key: string]: string }) =>
@@ -40,16 +41,20 @@ Props) => {
       );
     };
   }, [files]);
-  //   const handleUploadImage = async () => {
-  //     try {
-  //       await uploadProfileImage(image, files[0].path);
-  //       handleCancelCrop();
-  //       toastr.success("Success", "Photo has been uploaded");
-  //     } catch (error) {
-  //       console.log(error);
-  //       toastr.error("Oops!!!", "Something went wrong");
-  //     }
-  //   };
+  const handleUploadImage = async () => {
+    try {
+      // const imageNameArr = files[0].path.split(".");
+      // const type = imageNameArr[imageNameArr.length - 1];
+      const uploadConfig = await axios.get("/api/user/image/upload");
+      await axios.put(uploadConfig.data.url, image, {
+        headers: { "Content-Type": image?.type }
+      });
+      console.log(uploadConfig.data);
+      handleCancelCrop();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleCancelCrop = () => {
     setFiles([]);
     setImage(null);
@@ -108,7 +113,7 @@ Props) => {
                       <Button.Group>
                         <Button
                           loading={loading}
-                          //   onClick={handleUploadImage}
+                          onClick={handleUploadImage}
                           style={{ width: "100px" }}
                           positive
                           icon="check"
@@ -130,7 +135,10 @@ Props) => {
 
               <Card.Group itemsPerRow={5}>
                 <Card>
-                  <Image src="/1.png" style={{ minHeight: "80%" }} />
+                  <Image
+                    src="https://e-commerce-gig.s3.eu-west-2.amazonaws.com/5f7ae773e129950018b79b82/feadce36-c9b4-4bf2-a6c8-f76d0cd427a9.jpeg"
+                    style={{ minHeight: "80%" }}
+                  />
                   <Button positive>Main Photo</Button>
                 </Card>
                 {photos &&

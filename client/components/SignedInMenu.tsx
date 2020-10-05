@@ -8,7 +8,7 @@ interface SignedInMenuInterface {
 }
 
 const SignedInMenu = ({ user }: SignedInMenuInterface) => {
-  const { firstName, lastName } = user;
+  const { firstName, lastName, _id } = user;
   return (
     <Menu.Item position="right">
       <Image avatar spaced="right" src="/1.png" />
@@ -24,7 +24,7 @@ const SignedInMenu = ({ user }: SignedInMenuInterface) => {
           </Dropdown.Item>
           <Dropdown.Item>
             <Icon name="user" />
-            <Link href="/profile">
+            <Link href="/profile/[userId]" as={`/profile/${_id}`}>
               <a>
                 <span className="text">My Profile</span>
               </a>
