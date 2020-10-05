@@ -11,7 +11,17 @@ const SignedInMenu = ({ user }: SignedInMenuInterface) => {
   const { firstName, lastName, _id } = user;
   return (
     <Menu.Item position="right">
-      <Image avatar spaced="right" src="/1.png" />
+      <Image
+        avatar
+        spaced="right"
+        src={
+          user.photos?.length !== 0
+            ? `https://e-commerce-gig.s3.eu-west-2.amazonaws.com/${
+                user.photos![0]
+              }`
+            : "/1.png"
+        }
+      />
       <Dropdown pointing="top left" text={`${firstName} ${lastName}`}>
         <Dropdown.Menu>
           <Dropdown.Item>

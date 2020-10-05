@@ -78,7 +78,17 @@ export class Profile extends Component<ProfileInterface> {
                 <Segment>
                   <Item.Group>
                     <Item>
-                      <Item.Image avatar size="small" src="/1.png" />
+                      <Item.Image
+                        avatar
+                        size="small"
+                        src={
+                          photos?.length !== 0
+                            ? `https://e-commerce-gig.s3.eu-west-2.amazonaws.com/${
+                                photos![0]
+                              }`
+                            : "/1.png"
+                        }
+                      />
                       <Item.Content verticalAlign="bottom">
                         <Header as="h1">
                           {firstName} {lastName}{" "}
