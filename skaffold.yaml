@@ -21,6 +21,8 @@ build:
             dest: .
           - src: "**/*.css"
             dest: .
+          - src: "tsconfig.json"
+            dest: .
     - image: kevinmitaki/ftm-auth
       context: auth
       docker:
@@ -28,4 +30,6 @@ build:
       sync:
         manual:
           - src: "src/**/*.ts"
+            dest: .
+          - src: "tsconfig.json"
             dest: .

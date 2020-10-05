@@ -15,17 +15,15 @@ import SettingsNav from "../../components/SettingsNav";
 import { User } from "../../interfaces/User";
 import withAuth from "../../hocs/withAuth";
 import axios from "axios";
+import Router from "next/router";
 
 interface Props {
-  loading: boolean;
   photos: { [key: string]: string }[];
   profile: { [key: string]: string };
   user: User | null;
 }
 
 const PhotosPage = ({
-  loading,
-  //   uploadProfileImage,
   photos,
   profile,
   user
@@ -34,6 +32,7 @@ const PhotosPage = ({
 Props) => {
   const [files, setFiles] = useState<{ [key: string]: string }[]>([]);
   const [image, setImage] = useState<Blob | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     return () => {
       files.forEach((file: { [key: string]: string }) =>
@@ -43,15 +42,20 @@ Props) => {
   }, [files]);
   const handleUploadImage = async () => {
     try {
-      // const imageNameArr = files[0].path.split(".");
-      // const type = imageNameArr[imageNameArr.length - 1];
+      setLoading(true);
       const uploadConfig = await axios.get("/api/user/image/upload");
       await axios.put(uploadConfig.data.url, image, {
         headers: { "Content-Type": image?.type }
       });
-      console.log(uploadConfig.data);
+      // @ts-ignore
+      await axios.post("/api/user/profile/edit", {
+        photos: [...user?.photos, uploadConfig.data.key]
+      });
+      setLoading(false);
+      Router.push("/settings/photos");
       handleCancelCrop();
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -136,17 +140,26 @@ Props) => {
               <Card.Group itemsPerRow={5}>
                 <Card>
                   <Image
-                    src="https://e-commerce-gig.s3.eu-west-2.amazonaws.com/5f7ae773e129950018b79b82/feadce36-c9b4-4bf2-a6c8-f76d0cd427a9.jpeg"
+                    src={
+                      user?.photos?.length !== 0
+                        ? `https://e-commerce-gig.s3.eu-west-2.amazonaws.com/${
+                            user?.photos![0]
+                          }`
+                        : `/1.png`
+                    }
                     style={{ minHeight: "80%" }}
                   />
                   <Button positive>Main Photo</Button>
                 </Card>
-                {photos &&
-                  photos
-                    .filter(photo => photo.url !== profile.photoURL)
-                    .map(photo => (
-                      <Card key={photo.id}>
-                        <Image src={photo.url} style={{ minHeight: "80%" }} />
+                {user?.photos?.length !== 0 &&
+                  user?.photos
+                    ?.filter((photo: string, index: number) => index !== 0)
+                    .map((photo: string) => (
+                      <Card key={photo}>
+                        <Image
+                          src={`https://e-commerce-gig.s3.eu-west-2.amazonaws.com/${photo}`}
+                          style={{ minHeight: "80%" }}
+                        />
                         <div className="ui two buttons">
                           <Button
                             // onClick={() => handleUpdateProfilePhoto(photo)}

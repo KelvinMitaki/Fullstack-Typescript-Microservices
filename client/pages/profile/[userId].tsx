@@ -171,7 +171,9 @@ export class Profile extends Component<ProfileInterface> {
                   {photos && photos.length !== 0 ? (
                     photos.map(photo => (
                       <Image.Group size="small" key={photo}>
-                        <Image src={`${photo}`} />
+                        <Image
+                          src={`https://e-commerce-gig.s3.eu-west-2.amazonaws.com/${photo}`}
+                        />
                       </Image.Group>
                     ))
                   ) : (
