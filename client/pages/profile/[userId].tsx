@@ -168,19 +168,18 @@ export class Profile extends Component<ProfileInterface> {
               <Grid.Column width={12}>
                 <Segment attached>
                   <Header icon="image" content="Photos" />
-                  {photos && photos.length !== 0 ? (
-                    photos.map(photo => (
-                      <Image.Group size="small" key={photo}>
+                  <Image.Group size="small">
+                    {photos && photos.length !== 0 ? (
+                      photos.map(photo => (
                         <Image
+                          key={photo}
                           src={`https://e-commerce-gig.s3.eu-west-2.amazonaws.com/${photo}`}
                         />
-                      </Image.Group>
-                    ))
-                  ) : (
-                    <Image.Group size="small">
+                      ))
+                    ) : (
                       <Image src="/1.png" />
-                    </Image.Group>
-                  )}
+                    )}
+                  </Image.Group>
                 </Segment>
               </Grid.Column>
               <Grid.Column width={12}>
