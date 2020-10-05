@@ -2,6 +2,8 @@ import React from "react";
 import { Menu, Image, Dropdown, Icon } from "semantic-ui-react";
 import Link from "next/link";
 import { User } from "../interfaces/User";
+import Axios from "axios";
+import Router from "next/router";
 
 interface SignedInMenuInterface {
   user: User;
@@ -51,7 +53,10 @@ const SignedInMenu = ({ user }: SignedInMenuInterface) => {
           <Dropdown.Item
             text="Sign Out"
             icon="power"
-            // onClick={(): LogoutUser => logoutUser()}
+            onClick={async () => {
+              await Axios.post("/api/user/logout");
+              Router.push("/login");
+            }}
           />
         </Dropdown.Menu>
       </Dropdown>

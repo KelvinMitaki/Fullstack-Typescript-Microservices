@@ -204,4 +204,9 @@ route.get(
   }
 );
 
+route.post("/user/logout", auth, (req: Request, res: Response) => {
+  req.session = null;
+  res.send({});
+});
+
 export { route as useroutes };
