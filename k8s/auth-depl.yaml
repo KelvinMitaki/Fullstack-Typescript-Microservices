@@ -28,6 +28,16 @@ spec:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_KEY
+            - name: AWS_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-key
+                  key: AWS_ACCESS_KEY
+            - name: AWS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret
+                  key: AWS_SECRET
 ---
 apiVersion: v1
 kind: Service

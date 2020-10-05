@@ -9,6 +9,8 @@ import {
   NotFound,
   validateRequest
 } from "@kmevents/common";
+import AWS from "aws-sdk";
+import { v4 } from "uuid";
 
 const route = Router();
 
@@ -26,6 +28,13 @@ declare global {
     }
   }
 }
+
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET,
+  signatureVersion: "v4",
+  region: "eu-west-2"
+});
 
 route.get(
   "/user/current_user",
@@ -169,6 +178,26 @@ route.get(
       throw new NotFound();
     }
     res.send(user);
+  }
+);
+
+route.get(
+  "/user/image/upload",
+  auth,
+  async (req: Request, res: Response): Promise<void> => {
+    const key = `${req.currentUser?._id}/${v4()}.jpeg`;
+    s3.getSignedUrl(
+      "putObject",
+      {
+        Bucket: "e-commerce-gig",
+        ContentType: "image/jpeg",
+        key
+      },
+      (err: Error, url: string) => {
+        if (err) throw new BadRequestError("Error obtaining image url");
+        res.send({ key, url });
+      }
+    );
   }
 );
 
