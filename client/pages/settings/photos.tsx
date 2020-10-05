@@ -33,6 +33,7 @@ Props) => {
   const [files, setFiles] = useState<{ [key: string]: string }[]>([]);
   const [image, setImage] = useState<Blob | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
   useEffect(() => {
     return () => {
       files.forEach((file: { [key: string]: string }) =>
@@ -70,9 +71,24 @@ Props) => {
   //       toastr.error("Oops!!!", error);
   //     }
   //   };
-  // const handleUpdateProfilePhoto = async photo => {
-  //     await updateProfilePhoto(photo);
-  //   };
+  const handleUpdateProfilePhoto = async (photo: string) => {
+    try {
+      setLoading(true);
+      await axios.post("/api/user/profile/edit", {
+        photos: [
+          photo,
+          ...user?.photos?.filter(
+            (mappedPhoto: string) => mappedPhoto !== photo
+          )
+        ]
+      });
+      setLoading(false);
+      Router.push("/settings/photos");
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
   return (
     <Layout title="Photos" user={user}>
       <div className="profile">
@@ -162,7 +178,11 @@ Props) => {
                         />
                         <div className="ui two buttons">
                           <Button
-                            // onClick={() => handleUpdateProfilePhoto(photo)}
+                            loading={loading && profilePhoto === photo}
+                            onClick={() => {
+                              setProfilePhoto(photo);
+                              handleUpdateProfilePhoto(photo);
+                            }}
                             basic
                             color="green"
                           >
