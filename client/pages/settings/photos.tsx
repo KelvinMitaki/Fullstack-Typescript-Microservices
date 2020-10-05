@@ -34,6 +34,11 @@ Props) => {
   const [image, setImage] = useState<Blob | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
+  const [profilePhotoLoading, setProfilePhotoLoading] = useState<boolean>(
+    false
+  );
+  const [deletePhoto, setDeletePhoto] = useState<string | null>(null);
+  const [deletePhotoLoading, setDeletePhotoLoading] = useState<boolean>(false);
   useEffect(() => {
     return () => {
       files.forEach((file: { [key: string]: string }) =>
@@ -64,16 +69,25 @@ Props) => {
     setFiles([]);
     setImage(null);
   };
-  //   const handleDeletePhoto = async photo => {
-  //     try {
-  //       await deletePhoto(photo);
-  //     } catch (error) {
-  //       toastr.error("Oops!!!", error);
-  //     }
-  //   };
+  const handleDeletePhoto = async (photo: string) => {
+    try {
+      setDeletePhotoLoading(true);
+      await axios.post("/api/user/profile/edit", {
+        photos: user?.photos?.filter(
+          (mappedPhoto: string) => mappedPhoto !== photo
+        )
+      });
+      setDeletePhotoLoading(false);
+      setLoading(false);
+      Router.push("/settings/photos");
+    } catch (error) {
+      setDeletePhotoLoading(false);
+      console.log(error);
+    }
+  };
   const handleUpdateProfilePhoto = async (photo: string) => {
     try {
-      setLoading(true);
+      setProfilePhotoLoading(true);
       await axios.post("/api/user/profile/edit", {
         photos: [
           photo,
@@ -82,10 +96,11 @@ Props) => {
           )
         ]
       });
+      setProfilePhotoLoading(false);
       setLoading(false);
       Router.push("/settings/photos");
     } catch (error) {
-      setLoading(false);
+      setProfilePhotoLoading(false);
       console.log(error);
     }
   };
@@ -178,7 +193,9 @@ Props) => {
                         />
                         <div className="ui two buttons">
                           <Button
-                            loading={loading && profilePhoto === photo}
+                            loading={
+                              profilePhotoLoading && profilePhoto === photo
+                            }
                             onClick={() => {
                               setProfilePhoto(photo);
                               handleUpdateProfilePhoto(photo);
@@ -189,7 +206,13 @@ Props) => {
                             Main
                           </Button>
                           <Button
-                            // onClick={() => handleDeletePhoto(photo)}
+                            loading={
+                              deletePhotoLoading && deletePhoto === photo
+                            }
+                            onClick={() => {
+                              setDeletePhoto(photo);
+                              handleDeletePhoto(photo);
+                            }}
                             basic
                             icon="trash"
                             color="red"
