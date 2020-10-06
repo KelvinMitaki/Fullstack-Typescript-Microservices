@@ -34,4 +34,12 @@ route.post(
   }
 );
 
+route.get(
+  "/event/all",
+  async (req: Request, res: Response): Promise<void> => {
+    const events = await Event.find({});
+    res.send(events);
+  }
+);
+
 export { route as eventRoutes };
