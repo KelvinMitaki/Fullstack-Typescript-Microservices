@@ -26,4 +26,5 @@ __exportStar(require("./events/BaseListener"), exports);
 __exportStar(require("./events/BasePublisher"), exports);
 __exportStar(require("./events/EventCreated"), exports);
 __exportStar(require("./events/EventUpdated"), exports);
+__exportStar(require("./events/UserCreated"), exports);
 __exportStar(require("./events/subjects"), exports);
