@@ -21,7 +21,7 @@ spec:
           image: mongo
           volumeMounts:
             - name: mongo-events-storage
-              mountPath: /data/db
+              mountPath: /data/db/mongo-events
 ---
 apiVersion: v1
 kind: Service

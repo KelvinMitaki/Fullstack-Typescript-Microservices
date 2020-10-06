@@ -15,7 +15,7 @@ app.use(
     signed: true,
     sameSite: true,
     httpOnly: true,
-    secret: process.env!.COOKIE_SECRET,
+    secret: process.env.COOKIE_SECRET,
     maxAge: 1000 * 60 * 60 * 24 * 7
   })
 );
