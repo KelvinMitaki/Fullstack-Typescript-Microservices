@@ -15,6 +15,14 @@ spec:
       containers:
         - name: events
           image: kevinmitaki/ftm-events
+          env:
+            - name: MONGO_URI
+              value: mongodb://mongo-events-srv:27017/events
+            - name: COOKIE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: cookie-secret
+                  key: COOKIE_SECRET
 ---
 apiVersion: v1
 kind: Service

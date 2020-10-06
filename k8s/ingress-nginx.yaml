@@ -18,3 +18,7 @@ spec:
             backend:
               serviceName: auth-srv
               servicePort: 3000
+          - path: /api/event/?(.*)
+            backend:
+              serviceName: events-srv
+              servicePort: 3000
