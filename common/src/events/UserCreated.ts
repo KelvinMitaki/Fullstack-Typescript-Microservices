@@ -5,6 +5,6 @@ export interface UserCreated {
   data: {
     _id: string;
     name: string;
-    profilePhoto: string;
+    photos: string[];
   };
 }
