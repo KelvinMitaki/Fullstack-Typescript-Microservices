@@ -7,3 +7,8 @@ export * from "./errors/RequestValidationError";
 export * from "./middlewares/auth";
 export * from "./middlewares/errorHandler";
 export * from "./middlewares/validateRequest";
+export * from "./events/BaseListener";
+export * from "./events/BasePublisher";
+export * from "./events/EventCreated";
+export * from "./events/EventUpdated";
+export * from "./events/subjects";

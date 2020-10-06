@@ -21,3 +21,9 @@ __exportStar(require("./errors/RequestValidationError"), exports);
 __exportStar(require("./middlewares/auth"), exports);
 __exportStar(require("./middlewares/errorHandler"), exports);
 __exportStar(require("./middlewares/validateRequest"), exports);
+// EVENTS
+__exportStar(require("./events/BaseListener"), exports);
+__exportStar(require("./events/BasePublisher"), exports);
+__exportStar(require("./events/EventCreated"), exports);
+__exportStar(require("./events/EventUpdated"), exports);
+__exportStar(require("./events/subjects"), exports);
