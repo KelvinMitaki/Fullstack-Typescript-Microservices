@@ -11,6 +11,8 @@ import {
 } from "@kmevents/common";
 import AWS from "aws-sdk";
 import { v4 } from "uuid";
+import { UserCreatedPublisher } from "../events/publishers/UserCreatedPublisher";
+import { natsWrapper } from "../NatsWrapper";
 
 const route = Router();
 
@@ -84,6 +86,11 @@ route.post(
     });
 
     await user.save();
+    new UserCreatedPublisher(natsWrapper.client).publish({
+      _id: user._id,
+      name: user.firstName,
+      photos: user.photos!
+    });
     // @ts-ignore
     const userJwt = jwt.sign(
       {

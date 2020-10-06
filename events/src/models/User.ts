@@ -3,13 +3,13 @@ import mongoose from "mongoose";
 interface UserAttrs {
   _id: string;
   name: string;
-  profilePhoto: string;
+  photos: string[];
 }
 
 interface UserDoc extends mongoose.Document {
   _id: string;
   name: string;
-  profilePhoto: string;
+  photos: string[];
 }
 
 interface UserModel extends mongoose.Model<UserDoc> {
@@ -26,9 +26,8 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    profilePhoto: {
-      type: String,
-      required: true
+    photos: {
+      type: [String]
     }
   },
   { timestamps: true }
