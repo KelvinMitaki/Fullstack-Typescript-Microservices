@@ -12,9 +12,16 @@ spec:
       labels:
         app: mongo-depl
     spec:
+      volumes:
+        - name: mongo-events-storage
+          persistentVolumeClaim:
+            claimName: database-persistent-volume-claim
       containers:
         - name: mongo-depl
           image: mongo
+          volumeMounts:
+            - name: mongo-events-storage
+              mountPath: /data/db
 ---
 apiVersion: v1
 kind: Service
