@@ -53,6 +53,9 @@ const EventSchema = new mongoose.Schema(
     userId: {
       type: String,
       required: true
+    },
+    attendees: {
+      type: [String]
     }
   },
   { timestamps: true }
