@@ -33,3 +33,13 @@ build:
             dest: .
           - src: "tsconfig.json"
             dest: .
+    - image: kevinmitaki/ftm-events
+      context: events
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
+          - src: "tsconfig.json"
+            dest: .
