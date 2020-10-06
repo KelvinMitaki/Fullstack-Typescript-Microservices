@@ -5,8 +5,9 @@ import { Subjects } from "../subjects";
 
 export class EventCreatedListener extends Listener<EventCreated> {
   subject: Subjects.EventCreated = Subjects.EventCreated;
-  queueGroupName = "notifications-service";
+  queueGroupName = "events-service";
   onMessage(data: EventCreated["data"], msg: Message) {
     console.log("Event data", data);
+    msg.ack();
   }
 }
