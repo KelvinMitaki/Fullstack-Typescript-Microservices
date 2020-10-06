@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { app } from "./app";
 import { natsWrapper } from "./NatsWrapper";
+import { randomBytes } from "crypto";
 
 const start = async (): Promise<void> => {
   try {
@@ -11,11 +12,13 @@ const start = async (): Promise<void> => {
     ) {
       throw new Error("Env variables must be provided");
     }
-    await natsWrapper.connect(
-      "events",
-      Math.random().toString(),
-      "http://nats-srv:4222"
-    );
+    await natsWrapper.connect("events", "jhsdjsldkjk", "http://nats-srv:4222");
+    natsWrapper.client.on("close", () => {
+      console.log("Nats connection closed");
+      process.exit();
+    });
+    process.on("SIGINT", () => natsWrapper.client.close());
+    process.on("SIGTERM", () => natsWrapper.client.close());
     await mongoose.connect(process.env.MONGO_URI, {
       useFindAndModify: false,
       useNewUrlParser: true,
