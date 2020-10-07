@@ -152,6 +152,7 @@ route.post(
   auth,
   async (req: Request, res: Response): Promise<void> => {
     try {
+      console.log("reached");
       const { password } = req.body;
       if (password) {
         const hashedPassword = await bcrypt.hash(password, 12);
@@ -162,7 +163,7 @@ route.post(
           firstName: req.currentUser?.firstName,
           lastName: req.currentUser?.lastName
         });
-        new UserUpdatedPublisher(natsWrapper.client).publish({
+        await new UserUpdatedPublisher(natsWrapper.client).publish({
           _id: user?._id,
           name: user?.firstName!,
           photos: user?.photos!,
@@ -177,7 +178,7 @@ route.post(
         firstName: req.currentUser?.firstName,
         lastName: req.currentUser?.lastName
       });
-      new UserUpdatedPublisher(natsWrapper.client).publish({
+      await new UserUpdatedPublisher(natsWrapper.client).publish({
         _id: user?._id,
         name: user?.firstName!,
         photos: user?.photos!,

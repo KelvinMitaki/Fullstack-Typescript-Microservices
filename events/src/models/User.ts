@@ -47,7 +47,7 @@ UserSchema.statics.findByIdAndVersion = (data: {
   _id: string;
   version: number;
 }) => {
-  return User.findOne({ _id: data._id, version: data.version });
+  return User.findOne({ _id: data._id, version: data.version - 1 });
 };
 
 UserSchema.statics.build = (attrs: UserAttrs): mongoose.Document => {
