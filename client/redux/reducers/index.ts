@@ -25,7 +25,7 @@ const reducer = (state: any, action: AnyAction) => {
       ...state,
       ...action.payload
     };
-    if (state.formReducer) nextState.formReducer = state.formReducer;
+    if (state.form) nextState.form = state.form;
     return nextState;
   }
   return combineReducer(state, action);

@@ -43,6 +43,7 @@ export class Login extends Component<
     }
   }
   render() {
+    console.log(this.props.invalid);
     return (
       <Layout title="Login" user={this.props.user}>
         <div className="segment profile">
