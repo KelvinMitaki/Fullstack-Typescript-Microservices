@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface UserAttrs {
   firstName: string;
@@ -41,6 +42,7 @@ interface UserDoc extends mongoose.Document {
   followers?: { [key: string]: string }[];
   photos?: string[];
   interests?: string[];
+  version: number;
 }
 
 interface UserModel extends mongoose.Model<UserDoc> {
@@ -118,6 +120,10 @@ const UserSchema = new mongoose.Schema(
     }
   }
 );
+
+UserSchema.set("versionKey", "version");
+
+UserSchema.plugin(updateIfCurrentPlugin);
 
 UserSchema.statics.build = (attrs: UserAttrs): mongoose.Document => {
   return new User(attrs);

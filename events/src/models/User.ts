@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface UserAttrs {
   _id: string;
@@ -10,10 +11,15 @@ interface UserDoc extends mongoose.Document {
   _id: string;
   name: string;
   photos: string[];
+  version: number;
 }
 
 interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
+  findByIdAndVersion(data: {
+    _id: string;
+    version: number;
+  }): Promise<UserDoc | null>;
 }
 
 const UserSchema = new mongoose.Schema(
@@ -32,6 +38,17 @@ const UserSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+UserSchema.set("versionKey", "version");
+
+UserSchema.plugin(updateIfCurrentPlugin);
+
+UserSchema.statics.findByIdAndVersion = (data: {
+  _id: string;
+  version: number;
+}) => {
+  return User.findOne({ _id: data._id, version: data.version });
+};
 
 UserSchema.statics.build = (attrs: UserAttrs): mongoose.Document => {
   return new User(attrs);

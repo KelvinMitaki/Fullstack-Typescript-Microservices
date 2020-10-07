@@ -90,7 +90,8 @@ route.post(
     new UserCreatedPublisher(natsWrapper.client).publish({
       _id: user._id,
       name: user.firstName,
-      photos: user.photos!
+      photos: user.photos!,
+      version: user.version
     });
     // @ts-ignore
     const userJwt = jwt.sign(
@@ -164,7 +165,8 @@ route.post(
         new UserUpdatedPublisher(natsWrapper.client).publish({
           _id: user?._id,
           name: user?.firstName!,
-          photos: user?.photos!
+          photos: user?.photos!,
+          version: user!.version
         });
         res.send(user);
         return;
@@ -174,6 +176,12 @@ route.post(
         email: req.currentUser?.email,
         firstName: req.currentUser?.firstName,
         lastName: req.currentUser?.lastName
+      });
+      new UserUpdatedPublisher(natsWrapper.client).publish({
+        _id: user?._id,
+        name: user?.firstName!,
+        photos: user?.photos!,
+        version: user!.version
       });
       res.send(user);
     } catch (error) {

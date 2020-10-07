@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface EventAttrs {
   name: string;
@@ -18,6 +19,7 @@ interface EventDoc extends mongoose.Document {
   town: string;
   date: string;
   userId: string;
+  version: number;
 }
 
 interface EventModel extends mongoose.Model<EventDoc> {
@@ -60,6 +62,10 @@ const EventSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+EventSchema.set("versionKey", "version");
+
+EventSchema.plugin(updateIfCurrentPlugin);
 
 EventSchema.statics.build = (attrs: EventAttrs): mongoose.Document => {
   return new Event(attrs);

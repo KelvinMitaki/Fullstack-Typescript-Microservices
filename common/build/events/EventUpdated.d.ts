@@ -9,5 +9,6 @@ export interface EventUpdated {
         town: string;
         date: string;
         userId: string;
+        version: number;
     };
 }

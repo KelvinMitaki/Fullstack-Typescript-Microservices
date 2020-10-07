@@ -5,5 +5,6 @@ export interface UserCreated {
         _id: string;
         name: string;
         photos: string[];
+        version: number;
     };
 }

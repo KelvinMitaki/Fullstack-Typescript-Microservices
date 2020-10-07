@@ -7,7 +7,7 @@ export class UserUpdatedListener extends Listener<UserUpdated> {
   protected subject: Subjects.UserUpdated = Subjects.UserUpdated;
   protected queueGroupName = queueGroupName;
   protected async onMessage(data: UserUpdated["data"], msg: Message) {
-    const user = await User.findById(data._id);
+    const user = await User.findByIdAndVersion(data);
     if (!user) {
       throw new Error("No user with that id");
     }
