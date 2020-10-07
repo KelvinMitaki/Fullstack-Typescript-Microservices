@@ -17,4 +17,5 @@ export * from "./events/BasePublisher";
 export * from "./events/EventCreated";
 export * from "./events/EventUpdated";
 export * from "./events/UserCreated";
+export * from "./events/UserUpdated";
 export * from "./events/subjects";
