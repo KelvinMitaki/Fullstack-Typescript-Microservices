@@ -6,5 +6,6 @@ export interface UserUpdated {
     _id: string;
     name: string;
     photos: string[];
+    version: number;
   };
 }
