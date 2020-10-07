@@ -6,4 +6,5 @@ var Subjects;
     Subjects["EventCreated"] = "event:created";
     Subjects["EventUpdated"] = "event:updated";
     Subjects["UserCreated"] = "user:created";
+    Subjects["UserUpdated"] = "user:updated";
 })(Subjects = exports.Subjects || (exports.Subjects = {}));
