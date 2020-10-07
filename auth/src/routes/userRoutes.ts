@@ -13,6 +13,7 @@ import AWS from "aws-sdk";
 import { v4 } from "uuid";
 import { UserCreatedPublisher } from "../events/publishers/UserCreatedPublisher";
 import { natsWrapper } from "../NatsWrapper";
+import { UserUpdatedPublisher } from "../events/publishers/UserUpdatedPublisher";
 
 const route = Router();
 
@@ -159,6 +160,11 @@ route.post(
           email: req.currentUser?.email,
           firstName: req.currentUser?.firstName,
           lastName: req.currentUser?.lastName
+        });
+        new UserUpdatedPublisher(natsWrapper.client).publish({
+          _id: user?._id,
+          name: user?.firstName!,
+          photos: user?.photos!
         });
         res.send(user);
         return;
