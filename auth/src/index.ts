@@ -1,18 +1,24 @@
 import mongoose from "mongoose";
 import { app } from "./app";
 import { natsWrapper } from "./NatsWrapper";
-import { randomBytes } from "crypto";
 
 const start = async (): Promise<void> => {
   try {
     if (
       !process.env.COOKIE_SECRET ||
       !process.env.MONGO_URI ||
-      !process.env.JWT_KEY
+      !process.env.JWT_KEY ||
+      !process.env.NATS_CLUSTER_ID ||
+      !process.env.NATS_CLIENT_ID ||
+      !process.env.NATS_URL
     ) {
       throw new Error("Env variables must be provided");
     }
-    await natsWrapper.connect("events", "jhsdjsldkjk", "http://nats-srv:4222");
+    await natsWrapper.connect(
+      process.env.NATS_CLUSTER_ID,
+      process.env.NATS_CLIENT_ID,
+      process.env.NATS_URL
+    );
     natsWrapper.client.on("close", () => {
       console.log("Nats connection closed");
       process.exit();

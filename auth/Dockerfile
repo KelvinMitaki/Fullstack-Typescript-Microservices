@@ -10,4 +10,4 @@ RUN npm i --no-package-lock
 
 COPY ./ ./
 
-CMD [ "npm","run","dev" ]
+CMD [ "npm","start" ]
