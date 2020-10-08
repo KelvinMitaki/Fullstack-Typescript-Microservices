@@ -163,7 +163,8 @@ route.post(
           firstName: req.currentUser?.firstName,
           lastName: req.currentUser?.lastName
         });
-        await new UserUpdatedPublisher(natsWrapper.client).publish({
+        await user?.save();
+        new UserUpdatedPublisher(natsWrapper.client).publish({
           _id: user?._id,
           name: user?.firstName!,
           photos: user?.photos!,
@@ -178,7 +179,8 @@ route.post(
         firstName: req.currentUser?.firstName,
         lastName: req.currentUser?.lastName
       });
-      await new UserUpdatedPublisher(natsWrapper.client).publish({
+      await user?.save();
+      new UserUpdatedPublisher(natsWrapper.client).publish({
         _id: user?._id,
         name: user?.firstName!,
         photos: user?.photos!,
