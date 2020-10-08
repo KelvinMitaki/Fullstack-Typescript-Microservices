@@ -41,6 +41,7 @@ const ManageEvent = (
   props: InjectedFormProps<EventFormValues, Props> & Props
 ) => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [cancelEventLoading, setCancelEventLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const submitEvent = async (formValues: EventFormValues): Promise<void> => {
     try {
@@ -60,7 +61,16 @@ const ManageEvent = (
   };
   const cancelEvent = async (eventId: string): Promise<void> => {
     try {
-    } catch (error) {}
+      setError(null);
+      setCancelEventLoading(true);
+      await Axios.post(`/api/event/cancel/${eventId}`);
+      Router.push("/event/[id]", `/event/${eventId}`);
+      setCancelEventLoading(false);
+    } catch (error) {
+      console.log(error.response);
+      setError("Error cancelling event, please try again");
+      setCancelEventLoading(false);
+    }
   };
   if (props.error) {
     return <ErrorPage statusCode={props.error} />;
@@ -129,30 +139,26 @@ const ManageEvent = (
                     props.pristine ||
                     props.submitting ||
                     props.invalid ||
-                    loading
+                    loading ||
+                    props.initialValues.cancelled
                   }
                   positive
                   type="submit"
                 >
                   Submit
                 </Button>
-                <Button
-                  type="button"
-                  //   onClick={() => {
-                  //   }}
-                >
+                <Button type="button" onClick={() => Router.back()}>
                   Cancel
                 </Button>
                 <Button
-                  disabled={props.initialValues.cancelled}
+                  disabled={props.initialValues.cancelled || cancelEventLoading}
+                  loading={cancelEventLoading}
                   type="button"
                   color="red"
                   floated="right"
                   content="Cancel event"
-
-                  //   onClick={() => cancelEvent(Router.query)}
+                  onClick={() => cancelEvent(Router.query.eventId as string)}
                 />
-                {console.log(Router.query)}
                 <h5 style={{ color: "red" }}>{error}</h5>
               </Form>
             </Segment>

@@ -9,7 +9,6 @@ require("cookie-session");
 var NotAuthorizedError_1 = require("../errors/NotAuthorizedError");
 exports.auth = function (req, res, next) {
     var _a;
-    console.log("request", req.session);
     if (!((_a = req.session) === null || _a === void 0 ? void 0 : _a.jwt)) {
         throw new NotAuthorizedError_1.NotAuthorizedError();
     }
@@ -19,7 +18,6 @@ exports.auth = function (req, res, next) {
         next();
     }
     catch (error) {
-        console.log("error", error);
         throw new NotAuthorizedError_1.NotAuthorizedError();
     }
 };

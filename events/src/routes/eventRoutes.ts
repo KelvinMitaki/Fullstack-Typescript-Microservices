@@ -43,6 +43,7 @@ route.post(
 route.get(
   "/event/all",
   async (req: Request, res: Response): Promise<void> => {
+    console.log(await Event.find({}));
     const events = await Event.find({}).populate("user");
     res.send(events);
   }
@@ -98,12 +99,15 @@ route.post(
   "/event/cancel/:eventId",
   auth,
   async (req: Request, res: Response) => {
+    console.log(await Event.find({}));
     const event = await Event.findById(req.params.eventId).populate("user");
     if (!event) {
       throw new NotFound();
     }
+    console.log(req.currentUser);
+    console.log(event.user);
     // @ts-ignore
-    if (req.currentUser?._id !== event.user._id) {
+    if (req.currentUser?._id.toString() !== event.user._id.toString()) {
       throw new NotAuthorizedError();
     }
     event.cancelled = true;
