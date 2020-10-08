@@ -150,7 +150,10 @@ const EventDetailedHeader = ({
           </React.Fragment>
           {user && user._id === event?.user._id && (
             <Button color="orange" floated="right">
-              <Link href="/new/event">
+              <Link
+                href="/manage/event/[eventId]"
+                as={`/manage/event/${event._id}`}
+              >
                 <a>Manage Event</a>
               </Link>
             </Button>

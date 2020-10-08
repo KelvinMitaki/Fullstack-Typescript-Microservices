@@ -35,8 +35,8 @@ const event = (props: InjectedFormProps<EventFormValues>) => {
     try {
       setError(null);
       setLoading(true);
-      await Axios.post("/api/event/new", formValues);
-      Router.push("/");
+      const { data } = await Axios.post("/api/event/new", formValues);
+      Router.push("/event/[id]", `/event/${data._id}`);
       setLoading(false);
     } catch (error) {
       console.log(error.response);

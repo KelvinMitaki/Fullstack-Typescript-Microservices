@@ -9,6 +9,10 @@ import SelectInput from "../../../components/SelectInput";
 import DateInput from "../../../components/DateInput";
 import Axios from "axios";
 import Router from "next/router";
+import { Event } from "../../../interfaces/Event";
+import { NextPageContext } from "next";
+import buildClient from "../../../api/build-client";
+import ErrorPage from "next/error";
 
 const category = [
   { key: "drinks", text: "Drinks", value: "drinks" },
@@ -28,22 +32,32 @@ interface EventFormValues {
   date: Date;
 }
 
-const ManageEvent = (props: InjectedFormProps<EventFormValues>) => {
+interface Props {
+  event: Event;
+  error: number;
+}
+
+const ManageEvent = (
+  props: InjectedFormProps<EventFormValues, Props> & Props
+) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const submitEvent = async (formValues: EventFormValues): Promise<void> => {
     try {
       setError(null);
       setLoading(true);
-      await Axios.post("/api/event/new", formValues);
-      Router.push("/");
+      await Axios.post(`/api/event/edit/${props.event._id}`, formValues);
+      Router.push("/event/[id]", `/event/${props.event._id}`);
       setLoading(false);
     } catch (error) {
       console.log(error.response);
-      setError("Error submitting form, please try again");
+      setError("Error updating event, please try again");
       setLoading(false);
     }
   };
+  if (props.error) {
+    return <ErrorPage statusCode={props.error} />;
+  }
   return (
     <Layout title="New Event">
       <div className="profile">
@@ -178,6 +192,18 @@ const validate = (formValues: EventFormValues) => {
   }
   return errors;
 };
+
+ManageEvent.getInitialProps = async (ctx: NextPageContext) => {
+  try {
+    const { data } = await buildClient(ctx).get(
+      `/api/event/single/${ctx.query.eventId}`
+    );
+    return { initialValues: data };
+  } catch (error) {
+    return { error: error.response.status };
+  }
+};
+
 export default withAuth(
-  reduxForm<EventFormValues>({ form: "event", validate })(ManageEvent)
+  reduxForm<EventFormValues, Props>({ form: "event", validate })(ManageEvent)
 );
