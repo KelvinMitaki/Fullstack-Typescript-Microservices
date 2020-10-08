@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import Layout from "../../components/Layout";
 import { Grid, Segment, Header, Form, Select, Button } from "semantic-ui-react";
 import withAuth from "../../hocs/withAuth";
+import { Field, InjectedFormProps, reduxForm } from "redux-form";
+import TextInput from "../../components/reduxForm/TextInput";
+import TextArea from "../../components/TextArea";
+import SelectInput from "../../components/SelectInput";
+import DateInput from "../../components/DateInput";
 const category = [
   { key: "drinks", text: "Drinks", value: "drinks" },
   { key: "culture", text: "Culture", value: "culture" },
@@ -10,7 +15,17 @@ const category = [
   { key: "music", text: "Music", value: "music" },
   { key: "travel", text: "Travel", value: "travel" }
 ];
-export class event extends Component {
+
+interface EventFormValues {
+  name: string;
+  type: string;
+  description: string;
+  city: string;
+  town: string;
+  date: string;
+}
+
+export class event extends Component<InjectedFormProps<EventFormValues>> {
   render() {
     return (
       <Layout title="New Event">
@@ -20,69 +35,65 @@ export class event extends Component {
               <Segment clearing>
                 <Header sub color="teal" content="Event Details" />
                 <Form>
-                  <Form.Field
-                  //    error={touched && !!error}
-                  >
-                    <input type="text" />
-                    {/* {touched && error && (
-        <Label basic color="red">
-          {error}{" "}
-        </Label>
-      )} */}
-                  </Form.Field>
+                  <Field
+                    component={TextInput}
+                    placeholder="Event Name"
+                    name="name"
+                    id="name"
+                    type="text"
+                  />
                   <Form.Field
                   // error={touched && !!error}
                   >
-                    <Select
-                      // value={input.value || null}
-                      // onChange={(e, data) => input.onChange(data.value)}
+                    <Field
+                      component={SelectInput}
+                      multiple={false}
                       options={category}
-                      // multiple={multiple}
-                      // type={type}
+                      name="type"
                     />
                     {/* {touched && error && (
         <Label basic color="red">
           {error}{" "}
         </Label>
       )} */}
+                    <Field
+                      component={TextInput}
+                      placeholder="Event Name"
+                      name="name"
+                      id="name"
+                      type="text"
+                    />
                   </Form.Field>
-                  <Form.Field>
-                    <textarea />
-                    {/* {touched && error && (
-        <Label basic color="red">
-          {error}{" "}
-        </Label>
-      )} */}
-                  </Form.Field>
+                  <Field
+                    component={TextArea}
+                    placeholder="Event Details"
+                    name="description"
+                    id="description"
+                    type="text"
+                  />
                   <Header sub color="teal" content="Event Location Details" />
-                  <Form.Field
-                  //    error={touched && !!error}
-                  >
-                    <input type="text" />
-                    {/* {touched && error && (
-        <Label basic color="red">
-          {error}{" "}
-        </Label>
-      )} */}
-                  </Form.Field>
-                  <Form.Field
-                  //    error={touched && !!error}
-                  >
-                    <input type="text" />
-                    {/* {touched && error && (
-        <Label basic color="red">
-          {error}{" "}
-        </Label>
-      )} */}
-                  </Form.Field>
-                  {/* <Field
-                  name="date"
-                  component={DateInput}
-                  dateFormat="dd LLL yyyy h:mm a"
-                  showTimeSelect
-                  timeFormat="HH:mm"
-                  placeholder="Event Date"
-                /> */}
+                  <Field
+                    component={TextInput}
+                    placeholder="City"
+                    name="city"
+                    id="city"
+                    type="text"
+                  />
+                  <Field
+                    component={TextInput}
+                    placeholder="Town"
+                    name="town"
+                    id="town"
+                    type="text"
+                  />
+                  <Field
+                    name="date"
+                    component={DateInput}
+                    dateFormat="dd LLL yyyy h:mm a"
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    placeholder="Event Date"
+                  />
 
                   <Button
                     //   loading={loading}
@@ -130,4 +141,6 @@ export class event extends Component {
   }
 }
 
-export default withAuth(event);
+export default withAuth(
+  reduxForm<EventFormValues>({ form: "event" })(event)
+);

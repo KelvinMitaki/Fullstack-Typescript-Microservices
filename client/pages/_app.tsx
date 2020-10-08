@@ -7,6 +7,7 @@ import buildClient from "../api/build-client";
 import { User } from "../interfaces/User";
 import { wrapper } from "../redux/reducers";
 import { UserContext } from "../contexts/userContext";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface Props extends AppProps {
   user: User | null;
