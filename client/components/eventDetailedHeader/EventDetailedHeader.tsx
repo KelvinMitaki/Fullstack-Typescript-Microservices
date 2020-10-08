@@ -114,7 +114,14 @@ const EventDetailedHeader = ({
             height: "40vh"
           }}
         />
-
+        {event?.cancelled && (
+          <Label
+            style={{ top: "-40px" }}
+            ribbon="right"
+            color="red"
+            content="This event has been cancelled"
+          />
+        )}
         <Segment basic style={eventImageTextStyle}>
           <Item.Group>
             <Item>
@@ -148,7 +155,7 @@ const EventDetailedHeader = ({
               <Button>Cancel My Place</Button>
             )}
           </React.Fragment>
-          {user && user._id === event?.user._id && (
+          {user && user._id === event?.user._id && !event.cancelled && (
             <Button color="orange" floated="right">
               <Link
                 href="/manage/event/[eventId]"

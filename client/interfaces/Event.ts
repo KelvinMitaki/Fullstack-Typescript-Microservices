@@ -7,6 +7,7 @@ export interface Event {
   venue: string;
   date: string;
   cancelled?: boolean;
+  attendees: string[];
   user: {
     createdAt: string;
     name: string;
