@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Segment, Image, Header, Item, Button, Label } from "semantic-ui-react";
 import Link from "next/link";
+import { EventContext } from "../../contexts/eventContext";
+import { UserContext } from "../../contexts/userContext";
 
 const eventImageStyle = {
   filter: "brightness(30%)"
@@ -36,6 +38,8 @@ const EventDetailedHeader = ({
   authenticated,
   openModal
 }: EventDetailedHeaderInterface) => {
+  const { event } = useContext(EventContext);
+  const { user } = useContext(UserContext);
   // return singleEvent.map((event) => {
   //   const test = new Date(event.date.toDate());
   //   const arr = [
@@ -120,12 +124,15 @@ const EventDetailedHeader = ({
                   content="New Event"
                   style={{ color: "white" }}
                 />
-                <p> {`Monday Sep 2020 14:25`}</p>
+                <p>{new Date(event!.date).toDateString()}</p>
                 <p>
                   Hosted by{" "}
                   <strong>
-                    <Link href="/profile">
-                      <a>kevin mitaki</a>
+                    <Link
+                      href="/profile/[userId]"
+                      as={`/profile/${event?.user._id}`}
+                    >
+                      <a>{event?.user.name}</a>
                     </Link>
                   </strong>
                 </p>
@@ -137,13 +144,17 @@ const EventDetailedHeader = ({
       <Segment attached="bottom" clearing>
         <div className="test">
           <React.Fragment>
-            <Button>Cancel My Place</Button>
+            {user && user._id !== event?.user._id && (
+              <Button>Cancel My Place</Button>
+            )}
           </React.Fragment>
-          <Button color="orange" floated="right">
-            <Link href="/new/event">
-              <a>Manage Event</a>
-            </Link>
-          </Button>
+          {user && user._id === event?.user._id && (
+            <Button color="orange" floated="right">
+              <Link href="/new/event">
+                <a>Manage Event</a>
+              </Link>
+            </Button>
+          )}
         </div>
       </Segment>
       <style jsx>{`

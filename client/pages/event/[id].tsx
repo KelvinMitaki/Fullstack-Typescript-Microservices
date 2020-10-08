@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import EventDetailedHeader from "../../components/eventDetailedHeader/EventDetailedHeader";
 import Layout from "../../components/Layout";
 import { Grid } from "semantic-ui-react";
@@ -6,15 +6,26 @@ import EventDetailedInfo from "../../components/eventDetailedInfo/EventDetailedI
 import EventDetailedChat from "../../components/eventDetailedChat/EventDetailedChat";
 import EventDetailedSidebar from "../../components/eventDetailedSideBar/EventDetailedSidebar";
 import { User } from "../../interfaces/User";
+import { NextPageContext } from "next";
+import buildClient from "../../api/build-client";
+import { Event } from "../../interfaces/Event";
+import ErrorPage from "next/error";
+import { EventContext } from "../../contexts/eventContext";
 
 interface Props {
   user: User | null;
+  event: Event;
+  error?: number | null;
 }
 
-export class event extends Component<Props> {
-  render() {
-    return (
-      <Layout title="Event" user={this.props.user}>
+const event = (props: Props) => {
+  if (props.error) {
+    return <ErrorPage statusCode={props.error} />;
+  }
+  console.log(props.event);
+  return (
+    <Layout title="Event" user={props.user}>
+      <EventContext.Provider value={{ event: props.event }}>
         <div className="profile">
           <Grid stackable>
             <Grid.Column width={10}>
@@ -27,19 +38,31 @@ export class event extends Component<Props> {
             </Grid.Column>
           </Grid>
         </div>
-        <style jsx>{`
+      </EventContext.Provider>
+      <style jsx>{`
+        .profile {
+          margin-top: 35vh;
+        }
+        @media screen and (min-width: 760px) {
           .profile {
-            margin-top: 35vh;
+            margin-top: 15vh;
           }
-          @media screen and (min-width: 760px) {
-            .profile {
-              margin-top: 15vh;
-            }
-          }
-        `}</style>
-      </Layout>
+        }
+      `}</style>
+    </Layout>
+  );
+};
+
+event.getInitialProps = async (context: NextPageContext) => {
+  try {
+    const { data } = await buildClient(context).get(
+      `/api/event/single/${context.query.id}`
     );
+
+    return { event: data };
+  } catch (error) {
+    return { error: error.response.status };
   }
-}
+};
 
 export default event;

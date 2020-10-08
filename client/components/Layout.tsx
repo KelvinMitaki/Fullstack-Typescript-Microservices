@@ -78,7 +78,6 @@ const Layout = ({ children, title }: LayoutInterFace) => {
           </Menu.Item>
         </Container>
       </Menu>
-
       <Container>{children}</Container>
     </React.Fragment>
   );

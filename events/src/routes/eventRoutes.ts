@@ -1,4 +1,9 @@
-import { auth, validateRequest } from "@kmevents/common";
+import {
+  auth,
+  NotAuthorizedError,
+  NotFound,
+  validateRequest
+} from "@kmevents/common";
 import mongoose from "mongoose";
 import { Request, Response, Router } from "express";
 import { check } from "express-validator";
@@ -40,6 +45,52 @@ route.get(
   async (req: Request, res: Response): Promise<void> => {
     const events = await Event.find({}).populate("user");
     res.send(events);
+  }
+);
+
+route.get(
+  "/event/single/:eventId",
+  async (req: Request, res: Response): Promise<void> => {
+    const event = await Event.findById(req.params.eventId).populate("user");
+    if (!event) {
+      throw new NotFound();
+    }
+    res.send(event);
+  }
+);
+
+route.post(
+  "/event/edit/:eventId",
+  auth,
+  check("name").trim().notEmpty().withMessage("Event name cannot be empty"),
+  check("type").trim().notEmpty().withMessage("Event type cannot be empty"),
+  check("description")
+    .trim()
+    .notEmpty()
+    .withMessage("Event name cannot be empty"),
+  check("city").trim().notEmpty().withMessage("Event city cannot be empty"),
+  check("town").trim().notEmpty().withMessage("Event town cannot be empty"),
+  check("date").trim().notEmpty().withMessage("Event date cannot be empty"),
+  validateRequest,
+  async (req: Request, res: Response): Promise<void> => {
+    const { name, type, description, city, town, date, _id } = req.body;
+    const event = await Event.findById(_id);
+    const userId = req.body.user._id;
+    if (!event) {
+      throw new NotFound();
+    }
+
+    if (userId !== req.currentUser?._id) {
+      throw new NotAuthorizedError();
+    }
+    event.name = name;
+    event.type = type;
+    event.description = description;
+    event.city = city;
+    event.town = town;
+    event.date = date;
+    await event.save();
+    res.send(event);
   }
 );
 

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   Image,
   List,
@@ -22,7 +22,6 @@ interface Props {
 }
 
 const events = (props: Props) => {
-  console.log(props.events);
   return (
     <Layout title="Events">
       <div className="profile">
