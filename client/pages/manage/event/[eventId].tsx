@@ -33,7 +33,7 @@ interface EventFormValues {
 }
 
 interface Props {
-  event: Event;
+  initialValues: Event;
   error: number;
 }
 
@@ -46,14 +46,21 @@ const ManageEvent = (
     try {
       setError(null);
       setLoading(true);
-      await Axios.post(`/api/event/edit/${props.event._id}`, formValues);
-      Router.push("/event/[id]", `/event/${props.event._id}`);
+      await Axios.post(
+        `/api/event/edit/${props.initialValues._id}`,
+        formValues
+      );
+      Router.push("/event/[id]", `/event/${props.initialValues._id}`);
       setLoading(false);
     } catch (error) {
       console.log(error.response);
       setError("Error updating event, please try again");
       setLoading(false);
     }
+  };
+  const cancelEvent = async (eventId: string): Promise<void> => {
+    try {
+    } catch (error) {}
   };
   if (props.error) {
     return <ErrorPage statusCode={props.error} />;
@@ -137,17 +144,15 @@ const ManageEvent = (
                   Cancel
                 </Button>
                 <Button
-                  //   disabled={event.length < 1}
+                  disabled={props.initialValues.cancelled}
                   type="button"
                   color="red"
                   floated="right"
                   content="Cancel event"
 
-                  //   onClick={() => {
-                  //     cancelEventToggle(!event[0].cancelled, event[0].id);
-                  //   }}
+                  //   onClick={() => cancelEvent(Router.query)}
                 />
-
+                {console.log(Router.query)}
                 <h5 style={{ color: "red" }}>{error}</h5>
               </Form>
             </Segment>

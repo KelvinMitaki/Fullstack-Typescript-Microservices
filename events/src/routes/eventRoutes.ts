@@ -94,4 +94,22 @@ route.post(
   }
 );
 
+route.post(
+  "/event/cancel/:eventId",
+  auth,
+  async (req: Request, res: Response) => {
+    const event = await Event.findById(req.params.eventId).populate("user");
+    if (!event) {
+      throw new NotFound();
+    }
+    // @ts-ignore
+    if (req.currentUser?._id !== event.user._id) {
+      throw new NotAuthorizedError();
+    }
+    event.cancelled = true;
+    await event.save();
+    res.send(event);
+  }
+);
+
 export { route as eventRoutes };

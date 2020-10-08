@@ -115,24 +115,9 @@ const event = (props: InjectedFormProps<EventFormValues>) => {
                 >
                   Submit
                 </Button>
-                <Button
-                  type="button"
-                  //   onClick={() => {
-                  //   }}
-                >
+                <Button type="button" onClick={() => Router.back()}>
                   Cancel
                 </Button>
-                <Button
-                  //   disabled={event.length < 1}
-                  type="button"
-                  color="red"
-                  floated="right"
-                  content="Cancel event"
-
-                  //   onClick={() => {
-                  //     cancelEventToggle(!event[0].cancelled, event[0].id);
-                  //   }}
-                />
 
                 <h5 style={{ color: "red" }}>{error}</h5>
               </Form>

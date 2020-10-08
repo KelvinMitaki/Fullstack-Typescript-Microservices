@@ -15,8 +15,13 @@ const DateInput = ({
   meta: { touched, error },
   ...props
 }: Props) => {
+  console.log(value);
+  console.log(Object.prototype.toString.call(value));
   // FIX DATE WHEN FETCHING FROM THE DB WHICH COMES AS A STRING
-  if (Object.prototype.toString.call(value) === "[object String]") {
+  if (
+    Object.prototype.toString.call(value) === "[object String]" &&
+    value.trim() !== ""
+  ) {
     value = new Date(value);
   }
   return (
