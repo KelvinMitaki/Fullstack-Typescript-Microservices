@@ -4,7 +4,7 @@ export interface Event {
   category: string;
   description: string;
   city: string;
-  venue: string;
+  town: string;
   date: string;
   cancelled?: boolean;
   attendees: string[];

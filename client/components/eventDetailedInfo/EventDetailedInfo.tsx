@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Segment, Grid, Icon } from "semantic-ui-react";
+import { EventContext } from "../../contexts/eventContext";
 
 const EventDetailedInfo = () => {
+  const { event } = useContext(EventContext);
   // const test = new Date(singleEvent.date.toDate());
   // const arr = [
   //   "Jan",
@@ -33,15 +35,7 @@ const EventDetailedInfo = () => {
             <Icon size="large" color="teal" name="info" />
           </Grid.Column>
           <Grid.Column width={15}>
-            <p>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-              Perspiciatis ipsa quia blanditiis quisquam autem consequuntur
-              rerum accusantium voluptatem repudiandae nisi, dolor sed amet
-              placeat ipsum unde culpa quos dolore optio ad error consectetur.
-              Repellat sed voluptatibus ratione obcaecati nam. Repellat
-              doloribus nulla non similique sunt ipsa voluptate aperiam corporis
-              officiis.
-            </p>
+            <p>{event?.description}</p>
           </Grid.Column>
         </Grid>
       </Segment>
@@ -51,7 +45,7 @@ const EventDetailedInfo = () => {
             <Icon name="calendar" size="large" color="teal" />
           </Grid.Column>
           <Grid.Column width={15}>
-            <span> {`Monday Sep 2020 14:25`}</span>
+            <span> {new Date(event!.date).toDateString()}</span>
           </Grid.Column>
         </Grid>
       </Segment>
@@ -61,7 +55,7 @@ const EventDetailedInfo = () => {
             <Icon name="marker" size="large" color="teal" />
           </Grid.Column>
           <Grid.Column width={11}>
-            <span>Rongai </span>
+            <span>{event?.town} </span>
           </Grid.Column>
         </Grid>
       </Segment>
