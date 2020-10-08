@@ -1,4 +1,5 @@
 import { auth, validateRequest } from "@kmevents/common";
+import mongoose from "mongoose";
 import { Request, Response, Router } from "express";
 import { check } from "express-validator";
 import { Event } from "../models/Event";
@@ -27,7 +28,7 @@ route.post(
       city,
       town,
       date,
-      userId: req.currentUser!._id
+      user: mongoose.Types.ObjectId(req.currentUser!._id)
     });
     await event.save();
     res.send(event);
@@ -37,7 +38,7 @@ route.post(
 route.get(
   "/event/all",
   async (req: Request, res: Response): Promise<void> => {
-    const events = await Event.find({});
+    const events = await Event.find({}).populate("user");
     res.send(events);
   }
 );

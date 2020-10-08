@@ -6,4 +6,13 @@ export interface Event {
   city: string;
   venue: string;
   date: string;
+  cancelled?: boolean;
+  user: {
+    createdAt: string;
+    name: string;
+    photos: string[];
+    updatedAt: string;
+    version: number;
+    _id: string;
+  };
 }

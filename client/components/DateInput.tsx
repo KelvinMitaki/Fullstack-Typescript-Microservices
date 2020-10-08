@@ -15,11 +15,12 @@ const DateInput = ({
   meta: { touched, error },
   ...props
 }: Props) => {
-  console.log(value);
+  console.log(Object.prototype.toString.call(value));
   return (
     <Form.Field error={error && touched}>
       <ReactDatePicker
         {...props}
+        selected={value}
         onChange={onChange}
         onBlur={onBlur}
         onChangeRaw={e => e.preventDefault()}

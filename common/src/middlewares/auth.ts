@@ -19,7 +19,6 @@ declare global {
 }
 
 export const auth = (req: Request, res: Response, next: NextFunction): void => {
-  console.log("request", req.session);
   if (!req.session?.jwt) {
     throw new NotAuthorizedError();
   }
@@ -28,7 +27,6 @@ export const auth = (req: Request, res: Response, next: NextFunction): void => {
     req.currentUser = payload;
     next();
   } catch (error) {
-    console.log("error", error);
     throw new NotAuthorizedError();
   }
 };

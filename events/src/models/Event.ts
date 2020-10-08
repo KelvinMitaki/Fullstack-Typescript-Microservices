@@ -8,7 +8,8 @@ interface EventAttrs {
   city: string;
   town: string;
   date: string;
-  userId: string;
+  user: mongoose.Types.ObjectId;
+  cancelled?: boolean;
 }
 
 interface EventDoc extends mongoose.Document {
@@ -18,8 +19,9 @@ interface EventDoc extends mongoose.Document {
   city: string;
   town: string;
   date: string;
-  userId: string;
+  user: mongoose.Types.ObjectId;
   version: number;
+  cancelled?: boolean;
 }
 
 interface EventModel extends mongoose.Model<EventDoc> {
@@ -52,9 +54,14 @@ const EventSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    userId: {
-      type: String,
+    user: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
       required: true
+    },
+    cancelled: {
+      type: Boolean,
+      default: false
     },
     attendees: {
       type: [String]
