@@ -41,12 +41,20 @@ const EventDetailedHeader = ({
   openModal
 }: EventDetailedHeaderInterface) => {
   const [joinEventLoading, setJoinEventLoading] = useState<boolean>(false);
+  const [cancelEventLoading, setCancelEventLoading] = useState<boolean>(false);
   const { event } = useContext(EventContext);
   const { user } = useContext(UserContext);
 
   const cancelMyPlace = async (eventId: string): Promise<void> => {
     try {
-    } catch (error) {}
+      setCancelEventLoading(true);
+      await Axios.post(`/api/event/cancel/${eventId}`);
+      Router.push("/event/[id]", `/event/${eventId}`);
+      setCancelEventLoading(false);
+    } catch (error) {
+      console.log(error);
+      setCancelEventLoading(false);
+    }
   };
   const joinEvent = async (eventId: string): Promise<void> => {
     try {
@@ -114,7 +122,11 @@ const EventDetailedHeader = ({
               !!event!.attendees.find(
                 att => att._id.toString() === user._id.toString()
               ) && (
-                <Button onClick={() => cancelMyPlace(event!._id)}>
+                <Button
+                  loading={cancelEventLoading}
+                  disabled={cancelEventLoading}
+                  onClick={() => cancelMyPlace(event!._id)}
+                >
                   Cancel My Place
                 </Button>
               )}
