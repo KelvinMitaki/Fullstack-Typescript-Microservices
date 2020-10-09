@@ -15,7 +15,8 @@ const EventDetailedSidebar = () => {
         inverted
         color="teal"
       >
-        {event!.attendees.length + 1} people going
+        {event!.attendees.length + 1}{" "}
+        {event!.attendees.length === 0 ? "person" : "people"} going
       </Segment>
       <Segment attached>
         <Item.Group divided>
@@ -28,7 +29,15 @@ const EventDetailedSidebar = () => {
               Host
             </Label>
 
-            <Item.Image size="tiny" src={"/1.png"} />
+            <Item.Image
+              size="tiny"
+              src={
+                event?.user.photos.length !== 0
+                  ? "https://e-commerce-gig.s3.eu-west-2.amazonaws.com/" +
+                    event?.user.photos[0]
+                  : "/1.png"
+              }
+            />
             <Item.Content verticalAlign="middle">
               <Item.Header as="h3">
                 <Link

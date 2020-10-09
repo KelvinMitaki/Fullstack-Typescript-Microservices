@@ -152,7 +152,6 @@ route.post(
   auth,
   async (req: Request, res: Response): Promise<void> => {
     try {
-      console.log("reached");
       const { password } = req.body;
       if (password) {
         const hashedPassword = await bcrypt.hash(password, 12);

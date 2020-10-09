@@ -151,7 +151,7 @@ const EventDetailedHeader = ({
       <Segment attached="bottom" clearing>
         <div className="test">
           <React.Fragment>
-            {user && user._id !== event?.user._id && (
+            {user && user._id !== event?.user._id && !event?.cancelled && (
               <Button>Cancel My Place</Button>
             )}
           </React.Fragment>

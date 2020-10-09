@@ -104,8 +104,6 @@ route.post(
     if (!event) {
       throw new NotFound();
     }
-    console.log(req.currentUser);
-    console.log(event.user);
     // @ts-ignore
     if (req.currentUser?._id.toString() !== event.user._id.toString()) {
       throw new NotAuthorizedError();
