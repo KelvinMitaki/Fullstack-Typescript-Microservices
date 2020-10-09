@@ -22,6 +22,7 @@ interface EventDoc extends mongoose.Document {
   user: mongoose.Types.ObjectId;
   version: number;
   cancelled?: boolean;
+  attendees: { _id: mongoose.Types.ObjectId; name: string; photos: string[] }[];
 }
 
 interface EventModel extends mongoose.Model<EventDoc> {
@@ -64,7 +65,13 @@ const EventSchema = new mongoose.Schema(
       default: false
     },
     attendees: {
-      type: [String]
+      type: [
+        {
+          _id: mongoose.Types.ObjectId,
+          name: String,
+          photos: [String]
+        }
+      ]
     }
   },
   { timestamps: true }

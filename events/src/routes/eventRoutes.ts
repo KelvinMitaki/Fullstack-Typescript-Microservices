@@ -1,5 +1,6 @@
 import {
   auth,
+  BadRequestError,
   NotAuthorizedError,
   NotFound,
   validateRequest
@@ -8,6 +9,7 @@ import mongoose from "mongoose";
 import { Request, Response, Router } from "express";
 import { check } from "express-validator";
 import { Event } from "../models/Event";
+import { User } from "../models/User";
 
 const route = Router();
 
@@ -111,6 +113,30 @@ route.post(
     event.cancelled = true;
     await event.save();
     res.send(event);
+  }
+);
+
+route.post(
+  "/event/join/:eventId",
+  auth,
+  async (req: Request, res: Response): Promise<void> => {
+    const user = await User.findById(req.currentUser?._id);
+    if (!user) {
+      throw new BadRequestError("User not found");
+    }
+    const event = await Event.findById(req.params.eventId);
+    if (!event) {
+      throw new BadRequestError("Event not found");
+    }
+
+    event.attendees = [
+      ...event.attendees,
+      {
+        _id: mongoose.Types.ObjectId(user._id),
+        name: user.name,
+        photos: user.photos
+      }
+    ];
   }
 );
 
