@@ -137,6 +137,8 @@ route.post(
         photos: user.photos
       }
     ];
+    await event.save();
+    res.send(event);
   }
 );
 
