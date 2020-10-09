@@ -142,4 +142,23 @@ route.post(
   }
 );
 
+route.post(
+  "/event/cancel/:eventId",
+  auth,
+  async (req: Request, res: Response): Promise<void> => {
+    const event = await Event.findOne({ _id: req.params.eventId });
+    const userInEvent = event?.attendees.find(
+      att => att._id === mongoose.Types.ObjectId(req.currentUser?._id)
+    );
+    if (!userInEvent) {
+      throw new BadRequestError("this user is not in this event");
+    }
+    event!.attendees = event!.attendees.filter(
+      att => att._id !== mongoose.Types.ObjectId(req.currentUser?._id)
+    );
+    await event?.save();
+    res.send(event);
+  }
+);
+
 export { route as eventRoutes };

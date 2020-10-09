@@ -1,8 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Segment, Image, Header, Item, Button, Label } from "semantic-ui-react";
 import Link from "next/link";
 import { EventContext } from "../../contexts/eventContext";
 import { UserContext } from "../../contexts/userContext";
+import Axios from "axios";
+import Router from "next/router";
 
 const eventImageStyle = {
   filter: "brightness(30%)"
@@ -38,70 +40,25 @@ const EventDetailedHeader = ({
   authenticated,
   openModal
 }: EventDetailedHeaderInterface) => {
+  const [joinEventLoading, setJoinEventLoading] = useState<boolean>(false);
   const { event } = useContext(EventContext);
   const { user } = useContext(UserContext);
-  // return singleEvent.map((event) => {
-  //   const test = new Date(event.date.toDate());
-  //   const arr = [
-  //     "Jan",
-  //     "Feb",
-  //     "Mar",
-  //     "Apr",
-  //     "May",
-  //     "June",
-  //     "July",
-  //     "Aug",
-  //     "Sep",
-  //     "Oct",
-  //     "Nov",
-  //     "Dec",
-  //   ];
-  //   const year = test.getFullYear();
-  //   const month = arr[test.getMonth()];
 
-  //   const day = test.getDate();
-  //   const hour = test.getHours();
-
-  //   let minutes = test.getMinutes();
-  //   minutes = minutes === 0 ? "00" : minutes;
-  //   const newUser = Object.keys(event.attendees).map((key) => {
-  //     return {
-  //       id: key,
-  //       ...event.attendees[key],
-  //     };
-  //   });
-  //   const isGoing = newUser.some((u) => u.id === uid);
-  //   let eventCheck;
-
-  //   if (!isGoing && authenticated && !event.cancelled) {
-  //     eventCheck = (
-  //       <Button onClick={() => goingToEvent(event)} color="teal">
-  //         JOIN THIS EVENT
-  //       </Button>
-  //     );
-  //   } else if (!isGoing && authenticated && event.cancelled) {
-  //     eventCheck = (
-  //       <Label
-  //         size="large"
-  //         color="red"
-  //         content="This event has been cancelled"
-  //       />
-  //     );
-  //   } else if (!authenticated && !event.cancelled) {
-  //     eventCheck = (
-  //       <Button onClick={() => openModal("UnAuthModal")} color="teal">
-  //         JOIN THIS EVENT
-  //       </Button>
-  //     );
-  //   } else if (!authenticated && event.cancelled) {
-  //     eventCheck = (
-  //       <Label
-  //         size="large"
-  //         color="red"
-  //         content="This event has been cancelled"
-  //       />
-  //     );
-  //   }
+  const cancelMyPlace = async (eventId: string): Promise<void> => {
+    try {
+    } catch (error) {}
+  };
+  const joinEvent = async (eventId: string): Promise<void> => {
+    try {
+      setJoinEventLoading(true);
+      await Axios.post(`/api/event/join/${eventId}`);
+      Router.push("/event/[id]", `/event/${eventId}`);
+      setJoinEventLoading(false);
+    } catch (error) {
+      console.log(error);
+      setJoinEventLoading(false);
+    }
+  };
 
   return (
     <Segment.Group>
@@ -151,9 +108,32 @@ const EventDetailedHeader = ({
       <Segment attached="bottom" clearing>
         <div className="test">
           <React.Fragment>
-            {user && user._id !== event?.user._id && !event?.cancelled && (
-              <Button>Cancel My Place</Button>
-            )}
+            {user &&
+              user._id !== event?.user._id &&
+              !event?.cancelled &&
+              !!event!.attendees.find(
+                att => att._id.toString() === user._id.toString()
+              ) && (
+                <Button onClick={() => cancelMyPlace(event!._id)}>
+                  Cancel My Place
+                </Button>
+              )}
+            {user &&
+              user._id !== event?.user._id &&
+              !event?.cancelled &&
+              !event!.attendees.find(
+                att => att._id.toString() === user._id.toString()
+              ) && (
+                <Button
+                  color="green"
+                  floated="right"
+                  onClick={() => joinEvent(event!._id)}
+                  loading={joinEventLoading}
+                  disabled={joinEventLoading}
+                >
+                  Join This Event
+                </Button>
+              )}
           </React.Fragment>
           {user && user._id === event?.user._id && !event.cancelled && (
             <Button color="orange" floated="right">
