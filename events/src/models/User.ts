@@ -12,6 +12,7 @@ interface UserDoc extends mongoose.Document {
   name: string;
   photos: string[];
   version: number;
+  events: mongoose.Types.ObjectId[];
 }
 
 interface UserModel extends mongoose.Model<UserDoc> {
@@ -34,7 +35,13 @@ const UserSchema = new mongoose.Schema(
     },
     photos: {
       type: [String]
-    }
+    },
+    events: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Event"
+      }
+    ]
   },
   { timestamps: true }
 );

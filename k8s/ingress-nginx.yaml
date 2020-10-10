@@ -10,10 +10,6 @@ spec:
     - host: events.com
       http:
         paths:
-          - path: /?(.*)
-            backend:
-              serviceName: client-srv
-              servicePort: 3000
           - path: /api/user/?(.*)
             backend:
               serviceName: auth-srv
@@ -21,4 +17,8 @@ spec:
           - path: /api/event/?(.*)
             backend:
               serviceName: events-srv
+              servicePort: 3000
+          - path: /?(.*)
+            backend:
+              serviceName: client-srv
               servicePort: 3000

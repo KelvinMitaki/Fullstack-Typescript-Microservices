@@ -74,32 +74,52 @@ const events = (props: Props) => {
                 <Segment secondary>
                   <List horizontal>
                     <List.Item>
-                      <Image
-                        as="a"
-                        //   to={`/profile/${attendee.id}`}
-                        size="mini"
-                        circular
-                        src="/1.png"
-                      />
+                      <div
+                        onClick={() =>
+                          Router.push(
+                            "/profile/[userId]",
+                            `/profile/${event.user._id}`
+                          )
+                        }
+                      >
+                        <Image
+                          as="a"
+                          size="mini"
+                          circular
+                          src={
+                            event.user.photos.length !== 0
+                              ? "https://e-commerce-gig.s3.eu-west-2.amazonaws.com/" +
+                                event.user.photos[0]
+                              : "/1.png"
+                          }
+                        />
+                      </div>
                     </List.Item>
-                    <List.Item>
-                      <Image
-                        as="a"
-                        //   to={`/profile/${attendee.id}`}
-                        size="mini"
-                        circular
-                        src="/1.png"
-                      />
-                    </List.Item>
-                    <List.Item>
-                      <Image
-                        as="a"
-                        //   to={`/profile/${attendee.id}`}
-                        size="mini"
-                        circular
-                        src="/1.png"
-                      />
-                    </List.Item>
+                    {event.attendees.length !== 0 &&
+                      event.attendees.map(att => (
+                        <List.Item>
+                          <div
+                            onClick={() =>
+                              Router.push(
+                                "/profile/[userId]",
+                                `/profile/${att._id}`
+                              )
+                            }
+                          >
+                            <Image
+                              as="a"
+                              size="mini"
+                              circular
+                              src={
+                                att.photos.length !== 0
+                                  ? "https://e-commerce-gig.s3.eu-west-2.amazonaws.com/" +
+                                    att.photos[0]
+                                  : "/1.png"
+                              }
+                            />
+                          </div>
+                        </List.Item>
+                      ))}
                   </List>
                 </Segment>
                 <Segment clearing>

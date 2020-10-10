@@ -56,9 +56,9 @@ const EventDetailedSidebar = () => {
                 <Item.Image
                   size="tiny"
                   src={
-                    att.image.length !== 0
+                    att.photos.length !== 0
                       ? "https://e-commerce-gig.s3.eu-west-2.amazonaws.com/" +
-                        att.image[0]
+                        att.photos[0]
                       : "/1.png"
                   }
                 />

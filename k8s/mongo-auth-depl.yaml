@@ -14,14 +14,14 @@ spec:
     spec:
       volumes:
         - name: mongo-auth-storage
-          persistentVolumeClaim:
-            claimName: database-persistent-volume-claim
+          # persistentVolumeClaim:
+          #   claimName: database-persistent-volume-claim
       containers:
         - name: mongo-depl
           image: mongo
-          volumeMounts:
-            - name: mongo-auth-storage
-              mountPath: /data/db/mongo-auth
+          # volumeMounts:
+          #   - name: mongo-auth-storage
+          #     mountPath: /data/db/mongo-auth
 ---
 apiVersion: v1
 kind: Service

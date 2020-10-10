@@ -7,7 +7,7 @@ export interface Event {
   town: string;
   date: string;
   cancelled?: boolean;
-  attendees: { _id: string; image: string[]; name: string }[];
+  attendees: { _id: string; photos: string[]; name: string }[];
   user: {
     createdAt: string;
     name: string;

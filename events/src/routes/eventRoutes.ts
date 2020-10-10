@@ -38,15 +38,29 @@ route.post(
       user: mongoose.Types.ObjectId(req.currentUser!._id)
     });
     await event.save();
+    await User.findByIdAndUpdate(req.currentUser!._id, {
+      $push: { events: event._id }
+    });
     res.send(event);
+  }
+);
+
+route.get(
+  "/event/user/:userId",
+  async (req: Request, res: Response): Promise<void> => {
+    const user = await User.findById(req.params.userId).populate("events");
+    if (!user) {
+      throw new BadRequestError("No user with that id");
+    }
+    res.send(user);
   }
 );
 
 route.get(
   "/event/all",
   async (req: Request, res: Response): Promise<void> => {
-    console.log(await Event.find({}));
     const events = await Event.find({}).populate("user");
+    console.log("events", events);
     res.send(events);
   }
 );

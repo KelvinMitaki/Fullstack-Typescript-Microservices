@@ -19,6 +19,7 @@ import Layout from "../../components/Layout";
 import withAuth from "../../hocs/withAuth";
 import buildClient from "../../api/build-client";
 import { UserContext } from "../../contexts/userContext";
+import { Event } from "../../interfaces/Event";
 
 const panes = [
   { menuItem: "All Events", pane: { key: "allEvents" } },
@@ -27,10 +28,20 @@ const panes = [
   { menuItem: "Hosting", pane: { key: "hosted" } }
 ];
 
-interface ProfileInterface {
+interface ProfileInterface extends UserWithEvents {
   user: User | null;
   profileUser: User | null;
   errorStatus: number | null;
+}
+
+interface UserWithEvents {
+  eventUser: {
+    _id: string;
+    name: string;
+    photos: string[];
+    version: number;
+    events: Event[];
+  };
 }
 
 export class Profile extends Component<ProfileInterface> {
@@ -39,13 +50,18 @@ export class Profile extends Component<ProfileInterface> {
       const { data } = await buildClient(context).get(
         `/api/user/profile/${context.query.userId}`
       );
-      return { profileUser: data };
+      const res = await buildClient(context).get(
+        `/api/event/user/${context.query.userId}`
+      );
+
+      return { profileUser: data, eventUser: res.data };
     } catch (error) {
       // IF ERRROR REDIRECT TO ERROR PAGE
       return { errorStatus: error.response.status };
     }
   }
   render() {
+    console.log(this.props.eventUser);
     if (this.props.errorStatus) {
       return <ErrorPage statusCode={this.props.errorStatus} />;
     }
@@ -209,19 +225,17 @@ export class Profile extends Component<ProfileInterface> {
                   <br />
 
                   <Card.Group stackable itemsPerRow={5}>
-                    {events &&
-                      events.length !== 0 &&
-                      events.map(event => (
+                    {this.props.eventUser.events.length!==0 &&
+                  this.props.eventUser.events.map(event => (
                         <Card as="a" to={`/events/${event._id}`}>
                           {/* MAKE REQUEST TO FETCH EVENT DETAILS */}
                           <Image src="/1.png" />
                           <Card.Content>
                             <Card.Header textAlign="center">
-                              Lorem ipsum, dolor sit amet consectetur
-                              adipisicing elit. Harum, laboriosam?
+                              {event.description}
                             </Card.Header>
                             <Card.Meta textAlign="center">
-                              2 May 2020 21:33
+                              {new Date(event.date).toDateString()}
                             </Card.Meta>
                           </Card.Content>
                         </Card>

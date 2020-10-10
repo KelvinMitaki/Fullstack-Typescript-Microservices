@@ -14,14 +14,14 @@ spec:
     spec:
       volumes:
         - name: mongo-events-storage
-          persistentVolumeClaim:
-            claimName: database-persistent-volume-claim
+          # persistentVolumeClaim:
+          #   claimName: database-persistent-volume-claim
       containers:
         - name: mongo-depl
           image: mongo
-          volumeMounts:
-            - name: mongo-events-storage
-              mountPath: /data/db/mongo-events
+          # volumeMounts:
+          #   - name: mongo-events-storage
+          #     mountPath: /data/db/mongo-events
 ---
 apiVersion: v1
 kind: Service

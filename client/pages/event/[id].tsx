@@ -22,7 +22,6 @@ const event = (props: Props) => {
   if (props.error) {
     return <ErrorPage statusCode={props.error} />;
   }
-  console.log(props.event);
   return (
     <Layout title="Event" user={props.user}>
       <EventContext.Provider value={{ event: props.event }}>
@@ -31,7 +30,7 @@ const event = (props: Props) => {
             <Grid.Column width={10}>
               <EventDetailedHeader />
               <EventDetailedInfo />
-              <EventDetailedChat />
+              {/* <EventDetailedChat /> */}
             </Grid.Column>
             <Grid.Column width={6}>
               <EventDetailedSidebar />
