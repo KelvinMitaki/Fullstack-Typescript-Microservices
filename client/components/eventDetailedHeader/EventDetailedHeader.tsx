@@ -48,7 +48,7 @@ const EventDetailedHeader = ({
   const cancelMyPlace = async (eventId: string): Promise<void> => {
     try {
       setCancelEventLoading(true);
-      await Axios.post(`/api/event/cancel/${eventId}`);
+      await Axios.post(`/api/event/cancel/place/${eventId}`);
       Router.push("/event/[id]", `/event/${eventId}`);
       setCancelEventLoading(false);
     } catch (error) {
