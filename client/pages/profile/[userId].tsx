@@ -202,17 +202,76 @@ export class Profile extends Component<ProfileInterface, State> {
                     </Grid.Column>
                   </Grid>
                 </Segment>
-                <Segment>
-                  <h1>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Nisi praesentium eius laborum distinctio, tenetur inventore
-                    eos sit eum iusto fugit ab corporis dicta dolores culpa?
-                    Perspiciatis repellat nulla dignissimos minus ut delectus
-                    accusamus consectetur labore aperiam dolore blanditiis at
-                    hic vel voluptas eligendi, magnam illum laudantium in atque.
-                    Nam, esse!
-                  </h1>
-                </Segment>
+                <Grid.Column width={12}>
+                  <Segment attached>
+                    <h1>Followers</h1>
+                    {followers?.length !== 0 &&
+                      followers?.map(fol => (
+                        <div
+                          key={fol._id}
+                          onClick={() =>
+                            Router.push(
+                              "/profile/[userId]",
+                              `/profile/${fol._id}`
+                            )
+                          }
+                        >
+                          <Image.Group
+                            size="small"
+                            style={{ cursor: "pointer" }}
+                          >
+                            {fol.photos.length !== 0 ? (
+                              <Image
+                                src={`https://e-commerce-gig.s3.eu-west-2.amazonaws.com/${fol.photos[0]}`}
+                              />
+                            ) : (
+                              <Image src="/1.png" />
+                            )}
+                          </Image.Group>
+                          <strong>
+                            <h3>
+                              {fol.firstName} {fol.lastName}
+                            </h3>
+                          </strong>
+                        </div>
+                      ))}
+                  </Segment>
+                </Grid.Column>
+                <Grid.Column width={12}>
+                  <Segment attached>
+                    <h1>Following</h1>
+                    {following?.length !== 0 &&
+                      following?.map(fol => (
+                        <div
+                          key={fol._id}
+                          onClick={() =>
+                            Router.push(
+                              "/profile/[userId]",
+                              `/profile/${fol._id}`
+                            )
+                          }
+                        >
+                          <Image.Group
+                            size="small"
+                            style={{ cursor: "pointer" }}
+                          >
+                            {fol.photos.length !== 0 ? (
+                              <Image
+                                src={`https://e-commerce-gig.s3.eu-west-2.amazonaws.com/${fol.photos[0]}`}
+                              />
+                            ) : (
+                              <Image src="/1.png" />
+                            )}
+                          </Image.Group>
+                          <strong>
+                            <h3>
+                              {fol.firstName} {fol.lastName}
+                            </h3>
+                          </strong>
+                        </div>
+                      ))}
+                  </Segment>
+                </Grid.Column>
               </Grid.Column>
               <Grid.Column width={4}>
                 <Segment>

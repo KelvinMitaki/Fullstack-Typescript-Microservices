@@ -14,8 +14,18 @@ export interface User {
   occupation?: string;
   originCountry?: string;
   events?: { _id: string }[];
-  following?: string[];
-  followers?: string[];
+  following?: {
+    firstName: string;
+    lastName: string;
+    photos: string[];
+    _id: string;
+  }[];
+  followers?: {
+    firstName: string;
+    lastName: string;
+    photos: string[];
+    _id: string;
+  }[];
   photos?: string[];
   interests?: string[];
 }
