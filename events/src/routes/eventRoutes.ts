@@ -133,26 +133,23 @@ route.post(
   "/event/join/:eventId",
   auth,
   async (req: Request, res: Response): Promise<void> => {
-    const user = await User.findById(req.currentUser?._id);
-    if (!user) {
-      throw new BadRequestError("User not found");
-    }
     const event = await Event.findById(req.params.eventId);
     if (!event) {
       throw new BadRequestError("Event not found");
     }
+    const user = await User.findByIdAndUpdate(req.currentUser?._id, {
+      $push: { events: event!._id }
+    });
 
     event.attendees = [
       ...event.attendees,
       {
-        _id: mongoose.Types.ObjectId(user._id),
-        name: user.name,
-        photos: user.photos
+        _id: mongoose.Types.ObjectId(user!._id),
+        name: user!.name,
+        photos: user!.photos
       }
     ];
     await event.save();
-    user.events = [event._id, ...user.events];
-    await user.save();
     res.send(event);
   }
 );

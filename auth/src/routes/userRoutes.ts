@@ -199,7 +199,8 @@ route.get(
   auth,
   async (req: Request, res: Response): Promise<void> => {
     const user = await User.findById(req.params.profileId).populate(
-      "followers.firstName followers.lastName followers.photos following.firstName following.lastName following.photos"
+      "followers following",
+      "firstName lastName photos"
     );
     if (!user) {
       throw new NotFound();
@@ -243,6 +244,14 @@ route.post(
       $push: { following: userToFollow._id }
     });
     userToFollow.followers = [user?._id, ...userToFollow.followers];
+    await user?.save();
+    user!.photos &&
+      new UserUpdatedPublisher(natsWrapper.client).publish({
+        _id: user?._id,
+        name: user!.firstName,
+        photos: user!.photos,
+        version: user!.version
+      });
     await userToFollow.save();
     userToFollow.photos &&
       new UserUpdatedPublisher(natsWrapper.client).publish({

@@ -13,6 +13,7 @@ export class UserCreatedListener extends Listener<UserCreated> {
       photos: data.photos
     });
     await user.save();
+    console.log("user from user created", user);
     msg.ack();
   }
 }
