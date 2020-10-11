@@ -68,10 +68,9 @@ export class Profile extends Component<ProfileInterface, State> {
 
       const r = await buildClient(context).get("/api/user/current_user");
       const loggedInUserId = r.data.currentUser._id;
-      const following = (data as ProfileInterface["user"])?.followers?.find(
-        fol => fol === loggedInUserId
+      const following = data.followers?.find(
+        (fol: any) => fol._id === loggedInUserId
       );
-
       return { profileUser: data, eventUser: res.data, following };
     } catch (error) {
       // IF ERRROR REDIRECT TO ERROR PAGE
