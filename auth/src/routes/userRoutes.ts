@@ -52,6 +52,7 @@ route.get(
         process.env.JWT_KEY!
       ) as Jwt;
       const user = await User.findById(req.currentUser);
+
       res.send({ currentUser: user });
     } catch (error) {
       res.send({ currentUser: null });
@@ -93,6 +94,7 @@ route.post(
       photos: user.photos!,
       version: user.version
     });
+
     // @ts-ignore
     const userJwt = jwt.sign(
       {
@@ -196,7 +198,9 @@ route.get(
   "/user/profile/:profileId",
   auth,
   async (req: Request, res: Response): Promise<void> => {
-    const user = await User.findById(req.params.profileId);
+    const user = await User.findById(req.params.profileId).populate(
+      "followers.firstName followers.lastName followers.photos following.firstName following.lastName following.photos"
+    );
     if (!user) {
       throw new NotFound();
     }
@@ -240,6 +244,13 @@ route.post(
     });
     userToFollow.followers = [user?._id, ...userToFollow.followers];
     await userToFollow.save();
+    userToFollow.photos &&
+      new UserUpdatedPublisher(natsWrapper.client).publish({
+        _id: userToFollow._id,
+        name: userToFollow.firstName,
+        photos: userToFollow!.photos,
+        version: userToFollow.version
+      });
     res.send(user);
   }
 );
@@ -259,11 +270,30 @@ route.post(
     if (!userFound) {
       throw new BadRequestError("You are not following this user");
     }
-    user?.following?.filter(fol => fol.toHexString() !== req.params.userId);
+    user!.following = user?.following?.filter(
+      fol => fol.toHexString() !== req.params.userId
+    );
     await user?.save();
+    user!.photos &&
+      new UserUpdatedPublisher(natsWrapper.client).publish({
+        _id: user?._id,
+        name: user!.firstName,
+        photos: user!.photos,
+        version: user!.version
+      });
 
-    userToUnfollow.followers?.filter(fol => fol.toHexString() !== user?._id);
+    userToUnfollow.followers = userToUnfollow.followers?.filter(
+      fol => fol.toHexString() !== user?._id.toHexString()
+    );
     await userToUnfollow.save();
+    userToUnfollow!.photos &&
+      new UserUpdatedPublisher(natsWrapper.client).publish({
+        _id: userToUnfollow?._id,
+        name: userToUnfollow!.firstName,
+        photos: userToUnfollow!.photos,
+        version: userToUnfollow!.version
+      });
+
     res.send(user);
   }
 );

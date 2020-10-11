@@ -33,6 +33,7 @@ interface ProfileInterface extends UserWithEvents {
   user: User | null;
   profileUser: User | null;
   errorStatus: number | null;
+  following: boolean;
 }
 
 interface UserWithEvents {
@@ -65,7 +66,13 @@ export class Profile extends Component<ProfileInterface, State> {
         `/api/event/user/${context.query.userId}`
       );
 
-      return { profileUser: data, eventUser: res.data };
+      const r = await buildClient(context).get("/api/user/current_user");
+      const loggedInUserId = r.data.currentUser._id;
+      const following = (data as ProfileInterface["user"])?.followers?.find(
+        fol => fol === loggedInUserId
+      );
+
+      return { profileUser: data, eventUser: res.data, following };
     } catch (error) {
       // IF ERRROR REDIRECT TO ERROR PAGE
       return { errorStatus: error.response.status };
@@ -78,7 +85,7 @@ export class Profile extends Component<ProfileInterface, State> {
       Router.push("/profile/[userId]", `/profile/${userId}`);
       this.setState({ loading: false });
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data);
       this.setState({ loading: false });
     }
   };
@@ -89,7 +96,7 @@ export class Profile extends Component<ProfileInterface, State> {
       Router.push("/profile/[userId]", `/profile/${userId}`);
       this.setState({ loading: false });
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data);
       this.setState({ loading: false });
     }
   };
@@ -118,6 +125,7 @@ export class Profile extends Component<ProfileInterface, State> {
         photos,
         status
       } = this.props.profileUser;
+      console.log(this.props.profileUser);
       return (
         <Layout title="Profile">
           <div className="profile">
@@ -195,6 +203,17 @@ export class Profile extends Component<ProfileInterface, State> {
                     </Grid.Column>
                   </Grid>
                 </Segment>
+                <Segment>
+                  <h1>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Nisi praesentium eius laborum distinctio, tenetur inventore
+                    eos sit eum iusto fugit ab corporis dicta dolores culpa?
+                    Perspiciatis repellat nulla dignissimos minus ut delectus
+                    accusamus consectetur labore aperiam dolore blanditiis at
+                    hic vel voluptas eligendi, magnam illum laudantium in atque.
+                    Nam, esse!
+                  </h1>
+                </Segment>
               </Grid.Column>
               <Grid.Column width={4}>
                 <Segment>
@@ -211,9 +230,7 @@ export class Profile extends Component<ProfileInterface, State> {
                           />
                         ) : (
                           <React.Fragment>
-                            {!!user?.following?.find(
-                              fol => fol === Router.query.userId
-                            ) ? (
+                            {this.props.following ? (
                               <Button
                                 loading={this.state.loading}
                                 onClick={() =>
@@ -224,7 +241,7 @@ export class Profile extends Component<ProfileInterface, State> {
                                 color="red"
                                 fluid
                                 basic
-                                content="unfollow"
+                                content="Unfollow"
                               />
                             ) : (
                               <Button

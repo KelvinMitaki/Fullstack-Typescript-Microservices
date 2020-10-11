@@ -98,14 +98,18 @@ const UserSchema = new mongoose.Schema(
     events: {
       type: [String]
     },
-    following: {
-      type: [mongoose.Types.ObjectId],
-      ref: "User"
-    },
-    followers: {
-      type: [mongoose.Types.ObjectId],
-      ref: "User"
-    },
+    following: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "User"
+      }
+    ],
+    followers: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "User"
+      }
+    ],
     photos: {
       type: [String]
     },
