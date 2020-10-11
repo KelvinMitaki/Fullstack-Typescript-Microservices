@@ -151,6 +151,8 @@ route.post(
       }
     ];
     await event.save();
+    user.events = [event._id, ...user.events];
+    await user.save();
     res.send(event);
   }
 );

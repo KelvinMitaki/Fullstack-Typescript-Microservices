@@ -97,7 +97,7 @@ const events = (props: Props) => {
                     </List.Item>
                     {event.attendees.length !== 0 &&
                       event.attendees.map(att => (
-                        <List.Item>
+                        <List.Item key={att._id}>
                           <div
                             onClick={() =>
                               Router.push(
