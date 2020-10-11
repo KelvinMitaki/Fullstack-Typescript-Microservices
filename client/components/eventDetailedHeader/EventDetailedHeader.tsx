@@ -93,7 +93,7 @@ const EventDetailedHeader = ({
               <Item.Content>
                 <Header
                   size="huge"
-                  content="New Event"
+                  content={event?.name}
                   style={{ color: "white" }}
                 />
                 <p>{new Date(event!.date).toDateString()}</p>

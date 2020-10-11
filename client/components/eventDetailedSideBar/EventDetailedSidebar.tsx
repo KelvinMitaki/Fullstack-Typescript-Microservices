@@ -51,8 +51,8 @@ const EventDetailedSidebar = () => {
             </Item.Content>
           </Item>
           {event?.attendees.length !== 0 &&
-            event?.attendees.map(att => {
-              <Item style={{ position: "relative" }}>
+            event?.attendees.map(att => (
+              <Item key={att._id} style={{ position: "relative" }}>
                 <Item.Image
                   size="tiny"
                   src={
@@ -69,8 +69,8 @@ const EventDetailedSidebar = () => {
                     </Link>
                   </Item.Header>
                 </Item.Content>
-              </Item>;
-            })}
+              </Item>
+            ))}
         </Item.Group>
       </Segment>
     </Fragment>
