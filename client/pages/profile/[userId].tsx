@@ -61,7 +61,6 @@ export class Profile extends Component<ProfileInterface> {
     }
   }
   render() {
-    console.log(this.props.eventUser);
     if (this.props.errorStatus) {
       return <ErrorPage statusCode={this.props.errorStatus} />;
     }
@@ -212,22 +211,26 @@ export class Profile extends Component<ProfileInterface> {
                 <Segment attached loading={false}>
                   <Header icon="calendar" content="Events" />
                   <Tab
-                    //   onTabChange={(e, data) =>
-                    //     this.props.getUserEvents(
-                    //       this.props.match.params.id,
-                    //       data.activeIndex
-                    //     )
-                    //   }
-
+                    onTabChange={(e, data) => {
+                      // @ts-ignore
+                      console.log(e.target.value);
+                      console.log(data.panes![0].pane!);
+                    }}
                     panes={panes}
                     menu={{ secondary: true, pointing: true }}
                   />
                   <br />
 
                   <Card.Group stackable itemsPerRow={5}>
-                    {this.props.eventUser.events.length!==0 &&
-                  this.props.eventUser.events.map(event => (
-                        <Card as="a" to={`/events/${event._id}`}>
+                    {this.props.eventUser.events.length !== 0 &&
+                      this.props.eventUser.events.map(event => (
+                        <Card
+                          as="a"
+                          key={event._id}
+                          onClick={() =>
+                            Router.push("/event/[id]", `/event/${event._id}`)
+                          }
+                        >
                           {/* MAKE REQUEST TO FETCH EVENT DETAILS */}
                           <Image src="/1.png" />
                           <Card.Content>

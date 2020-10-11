@@ -6,22 +6,22 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mongo-depl
+      app: mongo-events-depl
   template:
     metadata:
       labels:
-        app: mongo-depl
+        app: mongo-events-depl
     spec:
       volumes:
         - name: mongo-events-storage
-          # persistentVolumeClaim:
-          #   claimName: database-persistent-volume-claim
+          persistentVolumeClaim:
+            claimName: database-persistent-volume-claim
       containers:
-        - name: mongo-depl
+        - name: mongo-events-depl
           image: mongo
-          # volumeMounts:
-          #   - name: mongo-events-storage
-          #     mountPath: /data/db/mongo-events
+          volumeMounts:
+            - name: mongo-events-storage
+              mountPath: /data/db/mongo-events
 ---
 apiVersion: v1
 kind: Service
@@ -30,7 +30,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: mongo-depl
+    app: mongo-events-depl
   ports:
     - name: db
       protocol: TCP

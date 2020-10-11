@@ -35,8 +35,8 @@ export class register extends Component<
     try {
       this.setState({ loading: true });
       await Axios.post("/api/user/register", formValues);
-      this.setState({ loading: false });
       Router.push("/");
+      this.setState({ loading: false });
     } catch (error) {
       this.setState({ loading: false, errors: error.response.data.errors });
     }

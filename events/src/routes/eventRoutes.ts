@@ -60,7 +60,6 @@ route.get(
   "/event/all",
   async (req: Request, res: Response): Promise<void> => {
     const events = await Event.find({}).populate("user");
-    console.log("events", events);
     res.send(events);
   }
 );

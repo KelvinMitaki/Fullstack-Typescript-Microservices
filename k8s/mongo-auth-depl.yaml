@@ -6,22 +6,22 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mongo-depl
+      app: mongo-auth-depl
   template:
     metadata:
       labels:
-        app: mongo-depl
+        app: mongo-auth-depl
     spec:
       volumes:
         - name: mongo-auth-storage
-          # persistentVolumeClaim:
-          #   claimName: database-persistent-volume-claim
+          persistentVolumeClaim:
+            claimName: database-persistent-volume-claim
       containers:
-        - name: mongo-depl
+        - name: mongo-auth-depl
           image: mongo
-          # volumeMounts:
-          #   - name: mongo-auth-storage
-          #     mountPath: /data/db/mongo-auth
+          volumeMounts:
+            - name: mongo-auth-storage
+              mountPath: /data/db/mongo-auth
 ---
 apiVersion: v1
 kind: Service
@@ -30,7 +30,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: mongo-depl
+    app: mongo-auth-depl
   ports:
     - name: db
       protocol: TCP
