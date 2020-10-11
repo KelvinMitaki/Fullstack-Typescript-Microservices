@@ -16,8 +16,8 @@ interface UserAttrs {
   occupation?: string;
   originCountry?: string;
   events?: { [key: string]: string }[];
-  following?: { [key: string]: string }[];
-  followers?: { [key: string]: string }[];
+  following?: mongoose.Types.ObjectId[];
+  followers?: mongoose.Types.ObjectId[];
   photos?: string[];
   age?: number;
   interests?: string[];
@@ -38,8 +38,8 @@ interface UserDoc extends mongoose.Document {
   occupation?: string;
   originCountry?: string;
   events?: { [key: string]: string }[];
-  following?: { [key: string]: string }[];
-  followers?: { [key: string]: string }[];
+  following?: mongoose.Types.ObjectId[];
+  followers?: mongoose.Types.ObjectId[];
   photos?: string[];
   interests?: string[];
   version: number;
@@ -99,10 +99,12 @@ const UserSchema = new mongoose.Schema(
       type: [String]
     },
     following: {
-      type: [String]
+      type: [mongoose.Types.ObjectId],
+      ref: "User"
     },
     followers: {
-      type: [String]
+      type: [mongoose.Types.ObjectId],
+      ref: "User"
     },
     photos: {
       type: [String]

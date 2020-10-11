@@ -227,6 +227,47 @@ route.get(
   }
 );
 
+route.post(
+  "/user/follow/:userId",
+  auth,
+  async (req: Request, res: Response): Promise<void> => {
+    const userToFollow = await User.findById(req.params.userId);
+    if (!userToFollow) {
+      throw new BadRequestError("No user with that ID");
+    }
+    const user = await User.findByIdAndUpdate(req.currentUser?._id, {
+      $push: { following: userToFollow._id }
+    });
+    userToFollow.followers = [user?._id, ...userToFollow.followers];
+    await userToFollow.save();
+    res.send(user);
+  }
+);
+
+route.post(
+  "/user/unfollow/:userId",
+  auth,
+  async (req: Request, res: Response): Promise<void> => {
+    const userToUnfollow = await User.findById(req.params.userId);
+    if (!userToUnfollow) {
+      throw new BadRequestError("No user with that ID");
+    }
+    const user = await User.findById(req.currentUser?._id);
+    const userFound = user?.following?.find(
+      fol => fol.toHexString() === req.params.userId
+    );
+    if (!userFound) {
+      throw new BadRequestError("You are not following this user");
+    }
+    user?.following?.filter(fol => fol.toHexString() !== req.params.userId);
+    await user?.save();
+
+    userToUnfollow.followers?.filter(fol => fol.toHexString() !== user?._id);
+    await userToUnfollow.save();
+    res.send(user);
+  }
+);
+
 route.post("/user/logout", auth, (req: Request, res: Response) => {
   req.session = null;
   res.send({});
