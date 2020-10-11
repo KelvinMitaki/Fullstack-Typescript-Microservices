@@ -20,6 +20,7 @@ import withAuth from "../../hocs/withAuth";
 import buildClient from "../../api/build-client";
 import { UserContext } from "../../contexts/userContext";
 import { Event } from "../../interfaces/Event";
+import Axios from "axios";
 
 const panes = [
   { menuItem: "All Events", pane: { key: "allEvents" } },
@@ -44,7 +45,17 @@ interface UserWithEvents {
   };
 }
 
-export class Profile extends Component<ProfileInterface> {
+interface State {
+  loading: boolean;
+}
+
+export class Profile extends Component<ProfileInterface, State> {
+  constructor(props: ProfileInterface) {
+    super(props);
+    this.state = {
+      loading: false
+    };
+  }
   static async getInitialProps(context: NextPageContext) {
     try {
       const { data } = await buildClient(context).get(
@@ -60,6 +71,28 @@ export class Profile extends Component<ProfileInterface> {
       return { errorStatus: error.response.status };
     }
   }
+  followUser = async (userId: string): Promise<void> => {
+    try {
+      this.setState({ loading: true });
+      await Axios.post(`/api/user/follow/${userId}`);
+      Router.push("/profile/[userId]", `/profile/${userId}`);
+      this.setState({ loading: false });
+    } catch (error) {
+      console.log(error);
+      this.setState({ loading: false });
+    }
+  };
+  unfollowUser = async (userId: string): Promise<void> => {
+    try {
+      this.setState({ loading: true });
+      await Axios.post(`/api/user/unfollow/${userId}`);
+      Router.push("/profile/[userId]", `/profile/${userId}`);
+      this.setState({ loading: false });
+    } catch (error) {
+      console.log(error);
+      this.setState({ loading: false });
+    }
+  };
   render() {
     if (this.props.errorStatus) {
       return <ErrorPage statusCode={this.props.errorStatus} />;
@@ -177,13 +210,35 @@ export class Profile extends Component<ProfileInterface> {
                             content="Edit Profile"
                           />
                         ) : (
-                          <Button
-                            // onClick={async () => await followUser(user)}
-                            color="teal"
-                            fluid
-                            basic
-                            content="Follow"
-                          />
+                          <React.Fragment>
+                            {!!user?.following?.find(
+                              fol => fol === Router.query.userId
+                            ) ? (
+                              <Button
+                                loading={this.state.loading}
+                                onClick={() =>
+                                  this.unfollowUser(
+                                    Router.query.userId as string
+                                  )
+                                }
+                                color="red"
+                                fluid
+                                basic
+                                content="unfollow"
+                              />
+                            ) : (
+                              <Button
+                                loading={this.state.loading}
+                                onClick={() =>
+                                  this.followUser(Router.query.userId as string)
+                                }
+                                color="teal"
+                                fluid
+                                basic
+                                content="Follow"
+                              />
+                            )}
+                          </React.Fragment>
                         )}
                       </React.Fragment>
                     )}
